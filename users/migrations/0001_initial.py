@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
             name='Profile',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(default='default.png', upload_to='profile_pics')),
+                ('image', models.ImageField(default='static/default.jpeg', upload_to='profile_pics')),
                 ('slug', autoslug.fields.AutoSlugField(editable=False, populate_from='user')),
                 ('bio', models.CharField(blank=True, max_length=255)),
                 ('friends', models.ManyToManyField(blank=True, to='users.Profile')),
