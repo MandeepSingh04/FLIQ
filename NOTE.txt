@@ -2,3 +2,11 @@ Superuser
 
 username - admin
 password - admin
+
+#git pull
+git clone https://github.com/MandeepSingh04/FLIQ.git
+
+#git push
+git add .
+git commit -m "few changes"
+git push -u origin main
