@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'users.apps.UsersConfig',
+    'chat.apps.ChatConfig',
     'feed.apps.FeedConfig',
     'crispy_forms',
     'stdimage',
