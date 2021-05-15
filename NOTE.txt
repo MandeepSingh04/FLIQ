@@ -2,7 +2,6 @@ Superuser
 
 username - admin
 password - admin
-email - admin@gmail.com
 
 #git pull
 git clone https://github.com/MandeepSingh04/FLIQ.git
@@ -11,3 +10,6 @@ git clone https://github.com/MandeepSingh04/FLIQ.git
 git add .
 git commit -m "few changes"
 git push -u origin main
+
+#django-chat
+https://www.youtube.com/watch?v=IpAk1Eu52GU

@@ -1,15 +1,6 @@
 # FLIQ
 A social media photo sharing website built on Django Framework.
 
-# Current Features:
-
-1. Login/Register
-2. Create post and comment on the particular post
-3. Receive notification when someone comment on your post
-4. Send friend request and accept request
-5. Live chat with friends
-
-# Coming Soon
 The features available to users :-
 1) Post images.  A short description and tags can be included if desired by user.
 2) can check everyone's post and also like and comment on the photos.
@@ -22,10 +13,10 @@ The features available to users :-
 9) Users can send friend request, cancel requests, accept requests, reject requests or even unfriend their friends.
 10) Users are given suggestions for new friends based on mutual friendships.
 
-# Technologies used :-
-1. Django
-2. SQLite
-3. Web Socket (Django Channel)
+Technologies used :-
+1) Frontend: HTML5, CSS (Bootstrap4 + Custom CSS), AJAX
+2) Backend: Django
+3) Storage: Django database
 
 To try out the website, please download the repository in your local system and provide all the local variables as per your requirements. Switch to your local storage or keep using Google Cloud but make sure to create an account on Google Cloud Storage and create buckets and put in the id wherever needed in the code (settings.py file).
 In this way, you would be able to run it in your local machine! Do try it out!
