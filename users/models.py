@@ -8,13 +8,20 @@ from autoslug import AutoSlugField
 
 class Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
+	name = models.CharField(max_length=30)
 	image = models.ImageField(default='default.png', upload_to='profile_pics')
 	slug = AutoSlugField(populate_from='user')
 	bio = models.CharField(max_length=255, blank=True)
+	link = models.CharField(max_length=255, blank=True)
 	friends = models.ManyToManyField("Profile", blank=True)
 
 	def __str__(self):
 		return str(self.user.username)
+	
+	def save(self, *args, **kwargs):
+		if not self.name:
+			self.name = self.get_default_name()
+		super(Profile, self).save(*args, **kwargs)
 
 	def get_absolute_url(self):
 		return "/users/{}".format(self.slug)

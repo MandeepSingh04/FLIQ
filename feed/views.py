@@ -10,8 +10,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Post, Comments, Like
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from users.models import Profile
+from django.utils.decorators import method_decorator
+
 import json
 
+@method_decorator(login_required, name='dispatch')
 class PostListView(ListView):
 	model = Post
 	template_name = 'feed/home.html'
@@ -21,6 +25,9 @@ class PostListView(ListView):
 	def get_context_data(self, **kwargs):
 		context = super(PostListView, self).get_context_data(**kwargs)
 		if self.request.user.is_authenticated:
+			p = Profile.objects.get(user=self.request.user)
+			friends = p.friends.all()
+			context['friends'] = friends
 			liked = [i for i in Post.objects.all() if Like.objects.filter(user = self.request.user, post=i)]
 			context['liked_post'] = liked
 		return context

@@ -12,40 +12,23 @@
 {% endblock searchform %} 
 {% block content %}
 
-<div class="px-3" style="padding-top:12vh;">
-  <div class="row">
-    <div class="col-md-12 d-flex justify-content-between align-items-center">
-      <div class="text-center">
+<div class="px-3" style="width:100%; max-width:100vw; padding-top:12vh;">
+  <div class="row"  style="overflow-x:auto; white-space: nowrap; width: 100%; display: flex; flex-wrap: nowrap;">
+      <div class="text-center" style="width:120px">
         <a href="#">
           <img src="{{ user.profile.image.url }}" class="rounded-circle" width="70px" height="70px"/>
         </a>
-        <p>name</p>
+        <p>{{ user.username }}</p>
       </div>
-      <div class="text-center">
+      {% for friend in friends %}
+      <div class="text-center" style="width:120px">
         <a href="#">
-          <img src="{{ user.profile.image.url }}" class="rounded-circle" width="70px" height="70px"/>
+          <img src="{{ friend.user.profile.image.url }}" class="rounded-circle" width="70px" height="70px"/>
         </a>
-        <p>name</p>
+        <p>{{ friend.user.username }}</p>
       </div>
-      <div class="text-center">
-        <a href="#">
-          <img src="{{ user.profile.image.url }}" class="rounded-circle" width="70px" height="70px"/>
-        </a>
-        <p>name</p>
-      </div>
-      <div class="text-center">
-        <a href="#">
-          <img src="{{ user.profile.image.url }}" class="rounded-circle" width="70px" height="70px"/>
-        </a>
-        <p>name</p>
-      </div>
-      <div class="text-center">
-        <a href="#">
-          <img src="{{ user.profile.image.url }}" class="rounded-circle" width="70px" height="70px"/>
-        </a>
-        <p>name</p>
-      </div>
-    </div>
+      {% endfor %}
+  </div>
     
     {% comment %} posts  {% endcomment %}
     <div class="col-md-12">
@@ -104,7 +87,6 @@
       {% endfor %}
     </div>
     
-  </div>
 </div>
 
 
