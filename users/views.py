@@ -130,7 +130,8 @@ def profile_view(request, slug):
 		'friends_list': friends,
 		'sent_friend_requests': sent_friend_requests,
 		'rec_friend_requests': rec_friend_requests,
-		'post_count': user_posts.count
+		'post_count': user_posts.count,
+		'posts': user_posts
 	}
 
 	return render(request, "users/profile.html", context)
@@ -195,7 +196,8 @@ def my_profile(request):
 		'friends_list': friends,
 		'sent_friend_requests': sent_friend_requests,
 		'rec_friend_requests': rec_friend_requests,
-		'post_count': user_posts.count
+		'post_count': user_posts.count,
+		'posts': user_posts
 	}
 
 	return render(request, "users/profile.html", context)

@@ -8,7 +8,10 @@ def chat(request):
 
 def room(request, room):
     chat_user = request.GET.get('chat_user')
-    room_details = Room.objects.get(name=room)
+    try:
+        room_details = Room.objects.get(name=room)
+    except Room.DoesNotExist:
+         room_details = None
     return render(request, 'room.html', {
         'chat_user': chat_user,
         'room': room,

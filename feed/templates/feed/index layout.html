@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="icon" type="image/png" href="https://dl.dropboxusercontent.com/s/o093y16u4d3kojv/code.png?dl=0" />
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" />
+  <link rel="stylesheet" type="text/css" href="https://dl.dropboxusercontent.com/s/ecyb1drs5j1jyjf/styles.css?dl=0" />
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+  <!-- Bootstrap Font Icon CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+  {% block cssfiles %}{% endblock cssfiles %}
+  <title>FLIQ</title>
+</head>
+<style>
+  .nav-item{
+    color:black;
+  }
+  .active{
+    color:rgb(30, 16, 231);
+  }
+  a{
+    text-decoration:none;
+  }
+  .navbuttons{
+      display: none;
+    }
+  @media screen and (max-width: 768px) {
+    .webnav{
+      display: none;
+    }
+    .webcontent{
+      display: none;
+    }
+    .navbuttons{
+      display: block;
+    }
+}
+</style>
+<body style="background-color: #f3f3f3">
+  <div class="webnav" style="background-color:rgb(255, 255, 255); position: fixed; z-index:2;">
+    <div class="row" style="width: 100vw;">
+      <div class="col-md-3 d-flex align-items-center">
+        <a class="nav-item navbar-brand ml-4 mr-4" href="/"><b>FLIQ</b></a>
+      </div>
+      <div class="col-md-6 d-flex justify-content-between align-items-center border-bottom" style="font-size:23px">
+        <a class="p-3 nav-item active" href="{% url 'home' %}"><i class="bi bi-house-fill"></i></a>
+        <a class="p-3 nav-item" href="{% url 'home' %}"><i class="bi bi-compass-fill"></i></a>
+        <a class="p-3 nav-item" href="{% url 'post-create' %}"><i class="bi bi-plus-circle-fill"></i></a>
+        <a class="p-3 nav-item" href="{% url 'users_list' %}"><i class="bi bi-person-plus-fill"></i></a>
+        <a class="p-3 nav-item" href="{% url 'my_profile' %}"><i class="bi bi-person-circle"></i></a>
+        {% if user.is_authenticated %}
+        {% endif %} 
+      </div>
+      <div class="col-md-3 d-flex justify-content-end">
+        {% block searchform %}{% endblock searchform %}
+        {% if user.is_authenticated %}
+        <a class="p-3 nav-item" href="{% url 'home' %}"><i class="bi bi-search"></i></a>
+        <a class="p-3 nav-item" href="chat/"><i class="bi bi-chat-right-text-fill"></i></a>
+        <a class="p-3 nav-item" href="{% url 'my_profile' %}"><i class="bi bi-person-circle"></i></a>
+        {% comment %} <a class="m-2 nav-item btn btn-danger text-light" href="{% url 'logout' %}">Logout</a> {% endcomment %}
+        {% else %}
+        <a class="mx-3 nav-item btn btn-success  text-light" href="{% url 'login' %}">Login</a>
+        <a class="mx-3 nav-item btn btn-info  text-light" href="{% url 'register' %} ">Register</a>
+        {% endif %} 
+      </div>
+    </div>
+  </div>
+  <div class="mobnav border-bottom" style="background-color:rgb(255, 255, 255); position: fixed; z-index:1;">
+    <div class="row" style="width: 100vw;">
+      <div class="col-3 d-flex align-items-center">
+        <a class="nav-item navbar-brand ml-4 mr-4" href="/"><b>FLIQ</b></a>
+      </div>
+      <div class="col-6 d-flex justify-content-between align-items-center" style="font-size:23px">
+        
+      </div>
+      <div class="col-3 d-flex justify-content-end">
+        {% if user.is_authenticated %}
+        <a class="p-3 nav-item" href="{% url 'home' %}"><i class="bi bi-search"></i></a>
+        <a class="p-3 nav-item" href="chat/"><i class="bi bi-chat-right-text-fill"></i></a>
+        <a class="p-3 nav-item" href="{% url 'my_profile' %}"><i class="bi bi-person-circle"></i></a>
+        {% comment %} <a class="m-2 nav-item btn btn-danger text-light" href="{% url 'logout' %}">Logout</a> {% endcomment %}
+        {% else %}
+        <a class="mx-3 nav-item btn btn-success  text-light" href="{% url 'login' %}">Login</a>
+        <a class="mx-3 nav-item btn btn-info  text-light" href="{% url 'register' %} ">Register</a>
+        {% endif %} 
+      </div>
+    </div>
+  </div>
+  <div class="" >
+    <div class="row" style="width: 100vw;">
+      <div class="col-md-3 webcontent" style="color:black;background-color:white; height:80vh;">
+        <div class="p-3"><a class="nav-item" href="{% url 'home' %}">FLIQ</a></div>
+        <div class="p-3"><a class="nav-item active" href="{% url 'home' %}"><i class="bi bi-house-fill"></i> Home</a></div>
+        <div class="p-3"><a class="nav-item" href="{% url 'home' %}"><i class="bi bi-search"></i> Search</a></div>
+        <div class="p-3"><a class="nav-item" href="{% url 'home' %}"><i class="bi bi-compass-fill"></i> Explore</a></div>
+        <div class="p-3"><a class="nav-item" href="{% url 'users_list' %}"><i class="bi bi-person-plus-fill"></i> Add New Friends</a></div>
+        {% if user.is_authenticated %}
+        <div class="p-3"><a class="nav-item" href="{% url 'friend_list' %}"><i class="bi bi-people-fill"></i> Friends</a></div>
+        <div class="p-3"><a class="nav-item" href="{% url 'my_profile' %}"><i class="bi bi-person-circle"></i> Profile</a></div>
+        <div class="p-3"><a class="nav-item" href="{% url 'post-create' %}"><i class="bi bi-plus-circle-fill"></i> Create Post</a></div>
+        <div class="p-3"><a class="nav-item" href="chat/"><i class="bi bi-chat-right-text-fill"></i> Chat</a></div>
+        <div class="p-3"><a class="nav-item" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i> Logout</a></div>
+        {% endif %} 
+      </div>
+      <div class="col-md-6" >
+        {% block content %}{% endblock content %}
+      </div>
+      <div class="col-md-3 webcontent py-5">
+        <div class="card card-signin  my-5">
+          <a href="{{ request.user.profile.get_absolute_url }}"
+            ><img
+              class="card-img-top"
+              src="{{ request.user.profile.image.url }}"
+              alt=""
+          /></a>
+          <div class="card-body">
+            <h5 class="card-title text-center">{{ request.user }}</h5>
+            <h6 class="text-center">
+              {{ request.user.profile.friends.count }}
+              <p class="text-muted">Friends</p>
+            </h6>
+            <p class="card-text text-center">{{ request.user.profile.bio }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="navbuttons" style="background-color:rgb(255, 255, 255); position: fixed; z-index:1;left: 0;bottom: 0;">
+    <div class="row" style="width: 100vw;">
+      <div class="col-md-3 d-flex align-items-center">
+      </div>
+      <div class="col-md-6 d-flex justify-content-between align-items-center border-bottom" style="font-size:23px">
+        <a class="p-3 nav-item active" href="{% url 'home' %}"><i class="bi bi-house-fill"></i></a>
+        <a class="p-3 nav-item" href="{% url 'home' %}"><i class="bi bi-compass-fill"></i></a>
+        <a class="p-3 nav-item" href="{% url 'post-create' %}"><i class="bi bi-plus-circle-fill"></i></a>
+        <a class="p-3 nav-item" href="{% url 'users_list' %}"><i class="bi bi-person-plus-fill"></i></a>
+        <a class="p-3 nav-item" href="{% url 'my_profile' %}"><i class="bi bi-person-circle"></i></a>
+        {% if user.is_authenticated %}
+        {% endif %} 
+      </div>
+      <div class="col-md-3 d-flex justify-content-end">
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer page-footer font-small black">
+    <div class="footer-copyright text-center py-3">
+      FLIQ © 2021 <br /><small class="text-muted">All rights reserved!</small>
+    </div>
+  </footer>
+
+  <!-- JS Files -->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  {% block jsfiles %}{% endblock jsfiles %}
+</body>
+
+</html>

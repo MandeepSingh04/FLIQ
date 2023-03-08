@@ -1,5 +1,5 @@
-{% extends "feed/layout.html" %} {% load static %} {% block searchform %}
-<form
+{% extends "feed/index layout.html" %} {% load static %} {% block searchform %}
+{% comment %} <form
   class="form-inline my-2 my-lg-0 ml-5"
   action="{% url 'search_posts' %}"
   method="get"
@@ -7,37 +7,69 @@
   <input name="p" type="text" placeholder="Search posts.." />
   <button class="btn btn-success my-2 my-sm-0 ml-4" type="submit">
     Search
-  </button>
+  </button> {% endcomment %}
 </form>
-{% endblock searchform %} {% block content %}
-<div class="container">
+{% endblock searchform %} 
+{% block content %}
+
+<div class="px-3" style="padding-top:12vh;">
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-12 d-flex justify-content-between align-items-center">
+      <div class="text-center">
+        <a href="#">
+          <img src="{{ user.profile.image.url }}" class="rounded-circle" width="70px" height="70px"/>
+        </a>
+        <p>name</p>
+      </div>
+      <div class="text-center">
+        <a href="#">
+          <img src="{{ user.profile.image.url }}" class="rounded-circle" width="70px" height="70px"/>
+        </a>
+        <p>name</p>
+      </div>
+      <div class="text-center">
+        <a href="#">
+          <img src="{{ user.profile.image.url }}" class="rounded-circle" width="70px" height="70px"/>
+        </a>
+        <p>name</p>
+      </div>
+      <div class="text-center">
+        <a href="#">
+          <img src="{{ user.profile.image.url }}" class="rounded-circle" width="70px" height="70px"/>
+        </a>
+        <p>name</p>
+      </div>
+      <div class="text-center">
+        <a href="#">
+          <img src="{{ user.profile.image.url }}" class="rounded-circle" width="70px" height="70px"/>
+        </a>
+        <p>name</p>
+      </div>
+    </div>
+    
+    {% comment %} posts  {% endcomment %}
+    <div class="col-md-12">
       {% for post in posts %}
-      <div class="card card-signin my-5">
-        <div class="card-body">
-          <a href="{{ post.user_name.profile.get_absolute_url }}"
-            ><img
+      <div class="card my-5">
+        <div class="row card-body">
+          <div class="col">
+          <a href="{{ post.user_name.profile.get_absolute_url }}"><img
               src="{{ post.user_name.profile.image.url }}"
               class="rounded-circle"
               width="30"
-              height="30"
-              alt=""
-          /></a>
-          <a
-            class="text-dark"
-            href="{{ post.user_name.profile.get_absolute_url }}"
-            ><b>{{ post.user_name }}</b></a
-          >
-          <br /><small class="text-muted"
-            >Posted on {{ post.date_posted }}</small
-          >
-          <br /><br />
-          <p class="card-text text-dark">{{ post.description }}</p>
+              height="30" 
+              alt=""/></a>
+          <a class="text-dark" href="{{ post.user_name.profile.get_absolute_url }}"><b>{{ post.user_name }}</b></a>
+          <br />
+          </div>
+          <div class="col d-flex justify-content-end">
+          <small class="text-muted ">Posted on {{ post.date_posted }}</small>
+          </div>
         </div>
         <a href="{% url 'post-detail' post.id %}"
-          ><img class="card-img-top" src="{{ post.pic.url }}" alt=""
+        ><img class="card-img-top" src="{{ post.pic.url }}" alt=""
         /></a>
+        <p class="card-text text-dark p-3"><b>{{ post.user_name }}</b> {{ post.description }}</p>
         {% if post.tags %}
         <br />
         <p class="text-danger ml-3">
@@ -71,8 +103,10 @@
       </div>
       {% endfor %}
     </div>
+    
   </div>
 </div>
+
 
 {% if is_paginated %} 
 	{% if page_obj.has_previous %}
