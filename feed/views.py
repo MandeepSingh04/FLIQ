@@ -116,6 +116,23 @@ def search_posts(request):
 	}
 	return render(request, "feed/search_posts.html", context)
 
+
+class explore_posts(ListView):
+	model = Post
+	template_name = 'feed/explore.html'
+	context_object_name = 'posts'
+	ordering = ['-date_posted']
+	paginate_by = 10
+	def get_context_data(self, **kwargs):
+		context = super(explore_posts, self).get_context_data(**kwargs)
+		if self.request.user.is_authenticated:
+			p = Profile.objects.get(user=self.request.user)
+			friends = p.friends.all()
+			context['friends'] = friends
+			liked = [i for i in Post.objects.all() if Like.objects.filter(user = self.request.user, post=i).exists()]
+			context['liked_post'] = liked
+		return context
+
 @login_required
 def like(request):
 	post_id = request.GET.get("likeId", "")

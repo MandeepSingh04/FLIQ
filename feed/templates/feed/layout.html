@@ -30,6 +30,9 @@
   .navbuttons{
       display: none;
     }
+  .mob{
+    display: block;
+  }
   @media screen and (max-width: 768px) {
     .webnav{
       display: none;
@@ -39,6 +42,9 @@
     }
     .navbuttons{
       display: block;
+    }
+    .mob{
+      display: none;
     }
 }
 </style>
@@ -53,7 +59,7 @@
         <a class="p-3 nav-item {% block exploreactive %}{% endblock exploreactive %}" href="{% url 'home' %}"><i class="bi bi-compass-fill"></i></a>
         <a class="p-3 nav-item {% block newpostactive %}{% endblock newpostactive %}" href="{% url 'post-create' %}"><i class="bi bi-plus-circle-fill"></i></a>
         <a class="p-3 nav-item {% block adduseractive %}{% endblock adduseractive %}" href="{% url 'users_list' %}"><i class="bi bi-person-plus-fill"></i></a>
-        <a class="p-3 nav-item {% block myprofileactive %}{% endblock myprofileactive %}" href="{% url 'my_profile' %}"><i class="bi bi-person-circle"></i></a>
+        <a class="p-3 nav-item myprofile {% block myprofileactive %}{% endblock myprofileactive %}" href="{% url 'my_profile' %}"><i class="bi bi-person-circle"></i></a>
         {% if user.is_authenticated %}
         {% endif %} 
       </div>

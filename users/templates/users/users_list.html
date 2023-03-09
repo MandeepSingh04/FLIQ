@@ -1,69 +1,95 @@
 {% extends "feed/layout.html" %} {% load static %}{% block searchform %}
-{% comment %} <form
-  class="form-inline my-2 my-lg-0 ml-5"
-  action="{% url 'search_users' %}"
-  method="get"
->
+{% comment %} <form class="form-inline my-2 my-lg-0 ml-5" action="{% url 'search_users' %}" method="get">
   <input name="q" type="text" placeholder="Search users.." />
   <button class="btn btn-success my-2 my-sm-0 ml-4" type="submit">
     Search
   </button>
 </form> {% endcomment %}
-{% endblock searchform %} 
+{% endblock searchform %}
 {% block adduseractive %}active{% endblock adduseractive %}
 {% block mobadduseractive %}active{% endblock mobadduseractive %}
 {% block content %}
 <div class="container py-5">
   <div class="row">
     <div class="col-md-8">
-      {% if users %}
-      <div class="card card-signin my-5">
-        <div class="card-body">
-          {% for user_p in users %}
-          <a href="{{ user_p.get_absolute_url }}"
-            ><img
-              src="{{ user_p.image.url }}"
-              class="rounded mr-2"
-              width="40"
-              height="40"
-              alt=""
-          /></a>
-          <a class="text-dark" href="{{ user_p.get_absolute_url }}"
-            ><b>{{ user_p }}</b></a
-          >
-          {% if not user_p.user in sent %}
-          <small class="float-right">
-            <a
-              class="btn btn-primary mr-2"
-              href="{% url 'send_friend_request' user_p.id %}"
-              >Add Friend</a
-            >
-          </small>
-          {% else %}
-          <small class="float-right">
-            <a
-              class="btn btn-warning mr-2"
-              href="{% url 'cancel_friend_request' user_p.id %}"
-              >Cancel Request</a
-            >
-          </small>
-          {% endif %}
-          <br /><br />
-          {% endfor %}
+      {% comment %} Request recieved  {% endcomment %}
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-signin my-5">
+            <div class="card-body">
+              <h2>Friend Requests Recieved ({{ rec_friend_requests.count }})</h2>
+              <hr class="my-2" />
+              {% if not rec_friend_requests %}
+              <h5><i>No recieved requests!</i></h5>
+              {% else %} {% for r_request in rec_friend_requests %}
+              <a href="{{ r_request.from_user.profile.get_absolute_url }}">
+                <img src="{{ r_request.from_user.profile.image.url }}" class="rounded mr-2" width="40" height="40"
+                  alt="" /></a>
+              <a class="mr-2 align-middle" href="{{ r_request.from_user.profile.get_absolute_url }}">
+                <b>{{ r_request.from_user.username }}</b>
+              </a>
+              <small class="float-right">
+                <a class="btn btn-success mr-2"
+                  href="/users/friend-request/accept/{{ r_request.from_user.id }}">Accept</a>
+                <a class="btn btn-danger" href="/users/friend-request/delete/{{ r_request.from_user.id }}">Reject</a>
+              </small>
+              <br /><br />
+              {% endfor %} {% endif %}
+            </div>
+          </div>
         </div>
       </div>
-      {% else %}
-      <h5><i>No new people to add now! Please come back later!</i></h5>
-      {% endif %}
-    </div>
-    <div class="col-md-4">
+      <h3><i>Suggestions</i></h3>
       <div class="card card-signin my-5">
-        <a href="{{ request.user.profile.get_absolute_url }}"
-          ><img
-            class="card-img-top"
-            src="{{ request.user.profile.image.url }}"
-            alt=""
-        /></a>
+        <div class="card-body">
+          {% if users %}
+            {% for user_p in users %}
+              {% if not user_p.user in sent %}
+                <a href="{{ user_p.get_absolute_url }}"><img src="{{ user_p.image.url }}" class="rounded mr-2" width="40"
+                    height="40" alt="" /></a>
+                <a class="text-dark" href="{{ user_p.get_absolute_url }}"><b>{{ user_p }}</b></a>
+                <small class="float-right">
+                  <a class="btn btn-primary mr-2" href="{% url 'send_friend_request' user_p.id %}">Add Friend</a>
+                </small>
+              {% else %}
+                <h5><i>No new people to add now! Please come back later!</i></h5>
+              {% endif %}
+              <br /><br />
+            {% endfor %}
+          {% else %}
+            <h5><i>No new people to add now! Please come back later!</i></h5>
+          {% endif %}
+        </div>
+      </div>
+      {% comment %} Recieved sent  {% endcomment %}
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-signin my-5">
+            <div class="card-body">
+              <h2>Friend Requests Sent ({{ sent_friend_requests.count }})</h2>
+              <hr class="my-2" />
+              {% if not sent_friend_requests %}
+              <h5><i>No sent requests!</i></h5>
+              {% else %} {% for s_request in sent_friend_requests %}
+              <a href="{{ s_request.to_user.profile.get_absolute_url }}"><img
+                  src="{{ s_request.to_user.profile.image.url }}" class="rounded mr-2" width="40" height="40"
+                  alt="" /></a>
+              <a href="{{ s_request.to_user.profile.get_absolute_url }}"><b>{{ s_request.to_user.username }}</b></a>
+              <small class="float-right">
+                <a class="btn btn-warning mr-2" href="{% url 'cancel_friend_request' s_request.to_user.id %}">Cancel</a>
+              </small>
+              <br /><br />
+              {% endfor %} {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    <div class="mob col-md-4">
+      <div class="card card-signin my-5">
+        <a href="{{ request.user.profile.get_absolute_url }}"><img class="card-img-top"
+            src="{{ request.user.profile.image.url }}" alt="" /></a>
         <div class="card-body">
           <h5 class="card-title text-center">{{ request.user }}</h5>
           <h6 class="text-center">
