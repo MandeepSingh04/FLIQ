@@ -12,7 +12,7 @@
 {% endblock searchform %} 
 {% block content %}
 
-<div class="px-3" style="width:100%; max-width:100vw; padding-top:12vh;">
+<div class="" style="width:100%; max-width:100vw; padding-top:10vh;">
   <div class="row"  style="overflow-x:auto; white-space: nowrap; width: 100%; display: flex; flex-wrap: nowrap;">
       <div class="text-center" style="width:120px">
         <a href="#">
@@ -31,10 +31,10 @@
   </div>
     
     {% comment %} posts  {% endcomment %}
-    <div class="col-md-12">
+    <div class="">
       {% for post in posts %}
-      <div class="card my-5">
-        <div class="row card-body">
+      <div class="card" style="margin-bottom:20px">
+        <div class="row p-2">
           <div class="col">
           <a href="{{ post.user_name.profile.get_absolute_url }}"><img
               src="{{ post.user_name.profile.image.url }}"
@@ -46,19 +46,22 @@
           <br />
           </div>
           <div class="col d-flex justify-content-end">
-          <small class="text-muted ">Posted on {{ post.date_posted }}</small>
+          <small class="text-muted ">{{ post.date_posted }}</small>
           </div>
         </div>
         <a href="{% url 'post-detail' post.id %}"
         ><img class="card-img-top" src="{{ post.pic.url }}" alt=""
         /></a>
-        <p class="card-text text-dark p-3"><b>{{ post.user_name }}</b> {{ post.description }}</p>
-        {% if post.tags %}
-        <br />
-        <p class="text-danger ml-3">
-          <b>Tags: <i>{{ post.tags }}</i></b>
+        <p class="card-text text-dark p-3 m-0">
+          <b>{{ post.user_name }}</b> {{ post.description }}
+          <br>
+
+          {% if post.tags %}
+          <span class="text-danger">
+            <b>Tags: <i>{{ post.tags }}</i></b>
+          </span>
+          {% endif %}
         </p>
-        {% endif %}
         <div class="card-footer">
           <button class="btn btn-white mr-3 like" id="{{ post.id }}">
             {% if post in liked_post %}
