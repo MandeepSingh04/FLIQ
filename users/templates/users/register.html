@@ -7,10 +7,18 @@
       <div class="card card-signin my-5">
         <div class="card-body">
           <h5 class="card-title text-center"><b>Register</b></h5>
+          <style>
+            span{
+              display:block;
+            }
+            input{
+              display:block;
+              width:100%;
+            }
+          </style>
           <form class="form-signin" method="POST">
             {% csrf_token %}
             <fieldset class="form-group">
-              <br />
               {{ form }}
             </fieldset>
             <div class="form-group">
