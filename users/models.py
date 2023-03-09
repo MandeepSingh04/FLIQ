@@ -17,11 +17,6 @@ class Profile(models.Model):
 
 	def __str__(self):
 		return str(self.user.username)
-	
-	def save(self, *args, **kwargs):
-		if not self.name:
-			self.name = self.get_default_name()
-		super(Profile, self).save(*args, **kwargs)
 
 	def get_absolute_url(self):
 		return "/users/{}".format(self.slug)
