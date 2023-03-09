@@ -1,23 +1,33 @@
+{% comment %} this page is not being used {% endcomment %}
+
 {% extends "feed/layout.html" %} {% load static %} {% block searchform %}
-<form
+{% comment %} <form
   class="form-inline my-2 my-lg-0 ml-5"
-  action="{% url 'search_users' %}"
+  action="{% url 'search' %}"
   method="get"
 >
   <input name="q" type="text" placeholder="Search users.." />
   <button class="btn btn-success my-2 my-sm-0 ml-4" type="submit">
     Search
   </button>
-</form>
+</form> {% endcomment %}
 {% endblock searchform %} {% block content %}
 <div class="container">
   <div class="row">
     <div class="col-md-8">
+      <div class="row">
+        <div class="col-md-12 my-5">
+          <form class="form-inline my-2 my-lg-0 ml-5" action="{% url 'search' %}" method="get">
+            <input name="q" type="text" placeholder="Search users.." />
+            <button class="btn btn-success my-2 my-sm-0 ml-4" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
       {% if not users %}
       <br /><br />
       <h2><i>No such users found!</i></h2>
       {% else %}
-      <div class="card card-signin my-5">
+      <div class="card card-signin">
         <div class="card-body">
           {% for user_p in users %}
           <a href="{{ user_p.profile.get_absolute_url }}"
@@ -37,7 +47,7 @@
       </div>
       {% endif %}
     </div>
-    <div class="col-md-4">
+    <div class="mob col-md-4">
       <div class="card card-signin my-5">
         <a href="{{ request.user.profile.get_absolute_url }}"
           ><img
@@ -56,5 +66,5 @@
       </div>
     </div>
   </div>
-  {% endblock content %}
 </div>
+{% endblock content %}

@@ -1,7 +1,7 @@
 {% extends "feed/layout.html" %} {% load static %} {% block searchform %}
 {% comment %} <form
   class="form-inline my-2 my-lg-0 ml-5"
-  action="{% url 'search_users' %}"
+  action="{% url 'search' %}"
   method="get"
 >
   <input name="q" type="text" placeholder="Search users.." />

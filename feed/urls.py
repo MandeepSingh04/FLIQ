@@ -10,7 +10,7 @@ urlpatterns=[
 	path('like/', views.like, name='post-like'),
 	path('post/<int:pk>/update/', PostUpdateView.as_view(), name='post-update'),
 	path('post/<int:pk>/delete/', views.post_delete, name='post-delete'),
-	path('search_posts/', views.search_posts, name='search_posts'),
+	path('search/', views.search, name='search'),
 	path('explore/', views.explore_posts.as_view(), name='explore'),
 	path('user_posts/<str:username>', UserPostListView.as_view(), name='user-posts'),
 ]

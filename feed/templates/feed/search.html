@@ -1,0 +1,144 @@
+{% extends "feed/layout.html" %} {% load static %} {% block searchform %}
+{% comment %} <form class="form-inline my-2 my-lg-0 ml-5" action="{% url 'search' %}" method="get">
+  <input name="p" type="text" placeholder="Search posts.." />
+  <button class="btn btn-success my-2 my-sm-0 ml-4" type="submit">
+    Search
+  </button>
+</form> {% endcomment %}
+{% endblock searchform %} {% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="row">
+        <div class="col-md-12 mt-5 mb-2">
+          <form class="form-inline" action="{% url 'search' %}" method="get">
+            <input name="p" type="text" id="search_field" placeholder="Type to Search" />
+            <button class="btn btn-success my-2 my-sm-0 ml-4" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+      <div class="row px-3">
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="pills-users-tab" data-toggle="pill" href="#pills-users" role="tab" aria-controls="pills-users" aria-selected="true">Accounts</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="pills-posts-tab" data-toggle="pill" href="#pills-posts" role="tab" aria-controls="pills-posts" aria-selected="false">Posts</a>
+          </li>
+        </ul>
+      </div>
+      <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-users" role="tabpanel" aria-labelledby="pills-users-tab">
+          {% if not users %}
+          <br /><br />
+          <h2><i>No such users found!</i></h2>
+          {% else %}
+          <div class="card card-signin">
+            <div class="card-body">
+              {% for user_p in users %}
+              <a href="{{ user_p.profile.get_absolute_url }}"><img src="{{ user_p.profile.image.url }}" class="rounded mr-2"
+                  width="40" height="40" alt="" /></a>
+              <a class="text-dark" href="{{ user_p.profile.get_absolute_url }}"><b>{{ user_p }}</b></a>
+              <br /><br />
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+        </div>
+        <div class="tab-pane fade" id="pills-posts" role="tabpanel" aria-labelledby="pills-posts-tab">
+          {% if not posts %}
+          <br /><br />
+          <h2><i>No such posts found!</i></h2>
+          {% endif %}
+          {% for post in posts %}
+          <div class="card" style="margin-bottom:20px">
+            <div class="row p-2">
+              <div class="col">
+                <a href="{{ post.user_name.profile.get_absolute_url }}"><img src="{{ post.user_name.profile.image.url }}"
+                    class="rounded-circle" width="30" height="30" alt="" /></a>
+                <a class="text-dark" href="{{ post.user_name.profile.get_absolute_url }}"><b>{{ post.user_name }}</b></a>
+                <br />
+              </div>
+              <div class="col d-flex justify-content-end">
+                <small class="text-muted ">{{ post.date_posted }}</small>
+              </div>
+            </div>
+            <a href="{% url 'post-detail' post.id %}"><img class="card-img-top" src="{{ post.pic.url }}" alt="" /></a>
+            <p class="card-text text-dark p-3 m-0">
+              <b>{{ post.user_name }}</b> {{ post.description }}
+              <br>
+      
+              {% if post.tags %}
+              <span class="text-danger">
+                <b>Tags: <i>{{ post.tags }}</i></b>
+              </span>
+              {% endif %}
+            </p>
+            <div class="card-footer">
+              <button class="btn btn-white mr-3 like" id="{{ post.id }}">
+                {% if post in liked_post %}
+                <a href="{% url 'post-like' %}" style="color: red" id="likebtn{{ post.id }}">
+                  Unlike</a>
+                | {{post.likes.count}} {% else %}
+                <a href="{% url 'post-like' %}" style="color: green" id="likebtn{{ post.id }}">
+                  Like</a>
+                | {{post.likes.count}} {% endif %}
+              </button>
+              <a class="btn btn-outline-info" href="{% url 'post-detail' post.id %}">Comments | {{ post.details.count }}</a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      
+      
+    </div>
+    <div class="mob col-md-4">
+      <div class="card card-signin my-5">
+        <a href="{{ request.user.profile.get_absolute_url }}"><img class="card-img-top"
+            src="{{ request.user.profile.image.url }}" alt="" /></a>
+        <div class="card-body">
+          <h5 class="card-title text-center">{{ request.user }}</h5>
+          <h6 class="text-center">
+            {{ request.user.profile.friends.count }}
+            <p class="text-muted">Friends</p>
+          </h6>
+          <p class="card-text text-center">{{ request.user.profile.bio }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block jsfiles %}
+<script>
+  var url_param = $(location).attr('href').split("?");
+  var param = (url_param[1]);
+  if(param){
+    $("#search_field").val(param.substring(2));
+  }
+  $(".like").click(function (e) {
+    var id = this.id;
+    var href = $(".like").find("a").attr("href");
+    e.preventDefault();
+
+    $.ajax({
+      url: href,
+      data: {
+        likeId: id,
+      },
+      success: function (response) {
+        if (response.liked) {
+          $("#likebtn" + id).html("Unlike");
+          $("#likebtn" + id).css("color", "red");
+        } else {
+          $("#likebtn" + id).html("Like");
+          $("#likebtn" + id).css("color", "green");
+        }
+      },
+    });
+  });
+</script>
+{% endblock jsfiles %}
