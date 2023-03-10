@@ -14,7 +14,7 @@
 <div class="main-content">
   <div class="container mt-7">
     <div class="row">
-      <div class="col-xl-8 m-auto order-xl-2 mb-5 mb-xl-0">
+      <div class="col-xl-8 order-xl-2 mx-auto mb-5 mb-xl-0">
         <div class="shadow">
           {% if request.user == u %}
           {% else %} {% if button_status == 'not_friend' %}
@@ -32,20 +32,38 @@
             </div>
           </div>
           {% endif %} {% endif %}
-          <div class="row">
-            <div class="col-lg-4 order-lg-4">
+          <div class="row mx-2">
+            <div class="col-6 col-sm-5 col-md-5 col-lg-4 order-lg-4">
               <div class="card-profile-image">
                 <a href="{{ u.profile.image.url }}">
-                  <img src="{{ u.profile.image.url }}" class="rounded-circle" width="160px" height="160px"
+                  <img src="{{ u.profile.image.url }}" class="rounded-circle" width="140px" height="140px"
                     style="object-fit:cover;" />
                 </a>
               </div>
             </div>
-            <div class="col-lg-8 order-lg-8">
+            <div class="col-6 col-sm-7 col-md-7 col-lg-8 order-lg-8">
               <div class="row my-2">
                 <h3 class="profile-user-name">{{ u.username }}</h3>
+              </div>
+              
+              <div class="row">
+                <div class="profile-stats my-1">
+                  <span class="profile-stat-count">{{ post_count }}</span>
+                  <span class="description"><a href="{% url 'user-posts' u.username %}">Posts</a></span>
+                  <span class="profile-stat-count">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                  <span class="profile-stat-count">{{ u.profile.friends.count }}</span>
+                  {% if request.user == u %}
+                  <span class="description"><a href="{% url 'friend_list' %}">Friends</a></span>
+                  {% else %}
+                  <span class="description">Friends</span>
+                  {% endif %}
+                  {% comment %} <span class="profile-stat-count">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                  <span class="profile-stat-count">206 following</span> {% endcomment %}
+                </div>
+              </div>
+              <div class="row my-2">
                 {% if request.user == u %}
-                <a class="btn btn-outline-dark mx-4" href="{% url 'edit_profile' %}">Edit Profile</a>
+                <a class="btn btn-outline-dark mr-2" href="{% url 'edit_profile' %}">Edit Profile</a>
                 <div class="dropdown">
                   <button class="btn btn-secondary btn-outline-dark dropdown-toggle" type="button"
                     id="SettingsDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -67,33 +85,16 @@
                 {% else %}
                 <small><a class="btn btn-danger mx-4" href="/users/friend/delete/{{ u.id }}">UnFriend</a></small>
                 {% endif %} {% endif %}
-                
-
               </div>
-              <div class="row">
-                <div class="profile-stats my-2">
-                  <span class="profile-stat-count">{{ post_count }}</span>
-                  <span class="description"><a href="{% url 'user-posts' u.username %}">Posts</a></span>
-                  <span class="profile-stat-count">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                  <span class="profile-stat-count">{{ u.profile.friends.count }}</span>
-                  {% if request.user == u %}
-                  <span class="description"><a href="{% url 'friend_list' %}">Friends</a></span>
-                  {% else %}
-                  <span class="description">Friends</span>
-                  {% endif %}
-                  {% comment %} <span class="profile-stat-count">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                  <span class="profile-stat-count">206 following</span> {% endcomment %}
-                </div>
-              </div>
-              <div class="row">
-                <div class="profile-desc my-2">
-                  <strong class="profile-stat-count">{{ u.profile.name }}</strong><br>
-                  <span class="profile-stat-count">{{ u.profile.bio }}</span>
-                  {% if u.profile.link %}
-                  <a class="profile-stat-count" target="_blank" rel="noopener noreferrer" href="{{ u.profile.link }}">{{ u.profile.link }}</a>
-                  {% endif %}
-                </div>
-              </div>
+            </div>
+          </div>
+          <div class="row mx-3">
+            <div class="profile-desc my-2">
+              <strong class="profile-stat-count">{{ u.profile.name }}</strong><br>
+              <span class="profile-stat-count">{{ u.profile.bio }}</span><br>
+              {% if u.profile.link %}
+              <a class="profile-stat-count" target="_blank" rel="noopener noreferrer" href="{{ u.profile.link }}">{{ u.profile.link }}</a>
+              {% endif %}
             </div>
           </div>
 
