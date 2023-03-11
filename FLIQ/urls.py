@@ -7,8 +7,8 @@ from django.conf import settings
 
 urlpatterns = [
 	path('admin/', admin.site.urls),
-	path('', include('chat.urls')),
 	path('', include('feed.urls')),
+	path('chat/', include('chat.urls')),
 	path('users/', user_views.users_list, name='users_list'),
 	path('users/<slug>/', user_views.profile_view, name='profile_view'),
 	path('friends/', user_views.friend_list, name='friend_list'),

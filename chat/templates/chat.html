@@ -1,111 +1,78 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {
-  margin: 0 auto;
-  max-width: 800px;
-  padding: 0 20px;
-}
-
-.container {
-  border: 2px solid #dedede;
-  background-color: #f1f1f1;
-  border-radius: 5px;
-  padding: 10px;
-  margin: 10px 0;
-}
-
-.darker {
-  border-color: #ccc;
-  background-color: #ddd;
-}
-
-.container::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-
-.container img {
-  float: left;
-  max-width: 60px;
-  width: 100%;
-  margin-right: 20px;
-  border-radius: 50%;
-}
-
-.container img.right {
-  float: right;
-  margin-left: 20px;
-  margin-right:0;
-}
-
-.time-right {
-  float: right;
-  color: #aaa;
-}
-
-.time-left {
-  float: left;
-  color: #999;
-}
-</style>
-</head>
-<body>
-
-<div align="center">
-    <h2>Django Chat</h2>
-</div>
+{% extends "feed/layout.html" %} {% load static %} {% block searchform %}
+{% comment %} <form class="form-inline my-2 my-lg-0 ml-5" action="{% url 'search' %}" method="get">
+  <input name="p" type="text" placeholder="Search posts.." />
+  <button class="btn btn-success my-2 my-sm-0 ml-4" type="submit">
+    Search
+  </button>
+</form> {% endcomment %}
+{% endblock searchform %} 
 
 
-<div class="container">
-    <style>
-    input[type=text], select {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    }
-
-    input[type=submit] {
-    width: 100%;
-    background-color: #4CAF50;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    }
-
-    input[type=submit]:hover {
-    background-color: #45a049;
-    }
-
-    div {
-    border-radius: 5px;
-    background-color: #f2f2f2;
-    padding: 20px;
-    }
-    </style>
-
-    <form id="post-form" method="POST" action="checkview">
-        {% csrf_token %}
-        <label>Room Name</label>
-        <input type="text" name="room_name" id="room_name" width="100px" />
-        <label>chat_user</label>
-        <input type="text" name="chat_user" id="chat_user" width="100px" />
-        <input type="submit" value="Enter Room">
-    </form>
-</div>
+{% block content %}
 
 
-</body>
 
+<section style="background-color: #eee;">
+  <div class="container py-5">
 
-</html>
+    <div class="row">
+
+      <div class="col-md-6 col-lg-5 col-xl-4 mb-4 mb-md-0">
+
+        <h5 class="font-weight-bold mb-3 text-center text-lg-start">Friends</h5>
+
+        <div class="card">
+          <div class="card-body">
+
+            <ul class="list-unstyled mb-0">
+              {% if friends %}
+              {% for user_p in friends %}
+              <li class="p-2 border-bottom" >
+                {% if request.user.username < user_p.user.username %}
+                <a href="{{ request.user.username }}-{{ user_p }}" class="d-flex justify-content-between">
+                {% else %}
+                  <a href="{{ user_p.user }}-{{ request.user.username }}" class="d-flex justify-content-between">
+                {% endif %}
+                    <div class="d-flex flex-row">
+                    <img src="{{ user_p.image.url }}" alt="avatar"
+                      class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60">
+                    <div class="pt-1">
+                      <p class="fw-bold mb-0">{{ user_p }}</p>
+                      <p class="small text-muted">Hello, Are you there?</p>
+                    </div>
+                  </div>
+                  <div class="pt-1">
+                    <p class="small text-muted mb-1">Just now</p>
+                    <span class="badge bg-danger float-end">1</span>
+                  </div>
+                </a>
+              </li>
+              {% endfor %}
+              {% else %}
+              <h5>
+                <i
+                  >You have no friends now! Make some new
+                  <a href="{% url 'users_list' %}">friends here!</a></i
+                >
+              </h5>
+              {% endif %}
+            </ul>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-md-6 col-lg-7 col-xl-8 mob">
+        <div class="text-center py-5 my-5">
+          <h3>Select a friend to chat</h3>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+ 
+{% endblock content %}

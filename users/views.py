@@ -9,6 +9,8 @@ from django.http import HttpResponseRedirect
 from .models import Profile, FriendRequest
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 import random
+from chat.models import Room
+
 User = get_user_model()
 
 @login_required
@@ -18,6 +20,7 @@ def users_list(request):
     rec_friend_requests = FriendRequest.objects.filter(to_user=request.user)
     my_friends = request.user.profile.friends.all()
     sent_to = []
+    received = []
     friends = []
 
     for user in my_friends:
@@ -41,6 +44,8 @@ def users_list(request):
             friends.remove(i)
     for se in sent_friend_requests:
         sent_to.append(se.to_user)
+    for se in rec_friend_requests:
+        received.append(se.to_user)
     context = {
         'users': friends,
         'sent': sent_to
@@ -64,6 +69,7 @@ def users_list(request):
     context = {
         'users': friends,
         'sent': sent_to,
+        'received': received,
         'button_status': button_status,
         'sent_friend_requests': sent_friend_requests,
         'rec_friend_requests': rec_friend_requests,
@@ -103,6 +109,11 @@ def accept_friend_request(request, id):
     user2 = from_user
     user1.profile.friends.add(user2.profile)
     user2.profile.friends.add(user1.profile)
+    #chat room
+    room = user2.username + '&' + user1.username
+    new_room = Room.objects.create(name=room)
+    new_room.save()
+
     if(FriendRequest.objects.filter(from_user=request.user, to_user=from_user).first()):
         request_rev = FriendRequest.objects.filter(from_user=request.user, to_user=from_user).first()
         request_rev.delete()
