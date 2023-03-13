@@ -98,8 +98,8 @@
       <div class="col-md-3 webcontent" style="color:black;background-color:white; height:80vh; margin-right:3vw">
         <div class="p-3"><a class="nav-item" href="{% url 'home' %}">FLIQ</a></div>
         <div class="p-3"><a class="nav-item " href="{% url 'home' %}"><i class="bi bi-house-fill"></i> Home</a></div>
-        <div class="p-3"><a class="nav-item active" href="{% url 'search' %}"><i class="bi bi-search"></i> Search</a></div>
-        <div class="p-3"><a class="nav-item" href="{% url 'explore' %}"><i class="bi bi-compass-fill"></i> Explore</a></div>
+        <div class="p-3"><a class="nav-item " href="{% url 'search' %}"><i class="bi bi-search"></i> Search</a></div>
+        <div class="p-3"><a class="nav-item active" href="{% url 'explore' %}"><i class="bi bi-compass-fill"></i> Explore</a></div>
         <div class="p-3"><a class="nav-item" href="{% url 'users_list' %}"><i class="bi bi-person-plus-fill"></i> Add New Friends</a></div>
         {% if user.is_authenticated %}
         <div class="p-3"><a class="nav-item" href="{% url 'friend_list' %}"><i class="bi bi-people-fill"></i> Friends</a></div>

@@ -20,8 +20,9 @@
     {% comment %} posts  {% endcomment %}
     <div class="">
       {% for post in posts %}
+      {% if not post.user_name.username == request.user.username %}
       <div class="card" style="margin-bottom:20px">
-        <div class="row p-2">
+        <div class="row p-2" style="margin:0px;padding:0px;">
           <div class="col">
           <a href="{{ post.user_name.profile.get_absolute_url }}"><img
               src="{{ post.user_name.profile.image.url }}"
@@ -74,6 +75,7 @@
           >
         </div>
       </div>
+      {% endif %}
       {% endfor %}
     </div>
     

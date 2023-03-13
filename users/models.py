@@ -6,20 +6,40 @@ from django.db.models.signals import post_save
 from django.conf import settings
 from autoslug import AutoSlugField
 
+# for image compression
+from io import BytesIO
+from PIL import Image
+from django.core.files import File
+
+#image compression method
+def compress(image):
+    im = Image.open(image)
+    im = im.convert('RGB')
+    im_io = BytesIO() 
+    im.save(im_io, 'JPEG', quality=60) 
+    new_image = File(im_io, name=image.name)
+    return new_image
+
 class Profile(models.Model):
-	user = models.OneToOneField(User, on_delete=models.CASCADE)
-	name = models.CharField(max_length=30)
-	image = models.ImageField(default='default.png', upload_to='profile_pics')
-	slug = AutoSlugField(populate_from='user')
-	bio = models.CharField(max_length=255, blank=True)
-	link = models.CharField(max_length=255, blank=True)
-	friends = models.ManyToManyField("Profile", blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=30)
+    image = models.ImageField(default='default.png', upload_to='profile_pics')
+    slug = AutoSlugField(populate_from='user')
+    bio = models.CharField(max_length=255, blank=True)
+    link = models.CharField(max_length=255, blank=True)
+    friends = models.ManyToManyField("Profile", blank=True)
+        
+    #calling image compression function before saving the data
+    def save(self, *args, **kwargs):
+        new_image = compress(self.image)
+        self.image = new_image
+        super().save(*args, **kwargs)
 
-	def __str__(self):
-		return str(self.user.username)
+    def __str__(self):
+        return str(self.user.username)
 
-	def get_absolute_url(self):
-		return "/users/{}".format(self.slug)
+    def get_absolute_url(self):
+        return "/users/{}".format(self.slug)
 
 def post_save_user_model_receiver(sender, instance, created, *args, **kwargs):
     if created:
@@ -31,12 +51,12 @@ def post_save_user_model_receiver(sender, instance, created, *args, **kwargs):
 post_save.connect(post_save_user_model_receiver, sender=settings.AUTH_USER_MODEL)
 
 class FriendRequest(models.Model):
-	to_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='to_user', on_delete=models.CASCADE)
-	from_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='from_user', on_delete=models.CASCADE)
-	timestamp = models.DateTimeField(auto_now_add=True)
+    to_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='to_user', on_delete=models.CASCADE)
+    from_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='from_user', on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
-	def __str__(self):
-		return "From {}, to {}".format(self.from_user.username, self.to_user.username)
+    def __str__(self):
+        return "From {}, to {}".format(self.from_user.username, self.to_user.username)
 
 
 

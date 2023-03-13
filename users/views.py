@@ -140,7 +140,7 @@ def profile_view(request, slug):
     u = p.user
     sent_friend_requests = FriendRequest.objects.filter(from_user=p.user)
     rec_friend_requests = FriendRequest.objects.filter(to_user=p.user)
-    user_posts = Post.objects.filter(user_name=u)
+    user_posts = Post.objects.filter(user_name=u).order_by('-date_posted')
 
     friends = p.friends.all()
 
@@ -208,7 +208,7 @@ def my_profile(request):
     you = p.user
     sent_friend_requests = FriendRequest.objects.filter(from_user=you)
     rec_friend_requests = FriendRequest.objects.filter(to_user=you)
-    user_posts = Post.objects.filter(user_name=you)
+    user_posts = Post.objects.filter(user_name=you).order_by('-date_posted')
     friends = p.friends.all()
 
     # is this user our friend

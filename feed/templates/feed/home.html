@@ -11,15 +11,15 @@
 <div class="" style="width:100%; max-width:100vw; padding-top:10vh;">
   <div class="row" style="overflow-x:auto; white-space: nowrap; width: 100%; display: flex; flex-wrap: nowrap;">
     <div class="text-center" style="width:120px">
-      <a href="#">
-        <img src="{{ user.profile.image.url }}" class="rounded-circle" width="70px" height="70px" />
+      <a href="{{ request.user.profile.get_absolute_url }}">
+        <img src="{{ user.profile.image.url }}" class="rounded-circle cover" style="position: relative; height:70px; width:70px" />
       </a>
       <p>{{ user.username }}</p>
     </div>
     {% for friend in friends %}
     <div class="text-center" style="width:120px">
-      <a href="#">
-        <img src="{{ friend.user.profile.image.url }}" class="rounded-circle" width="70px" height="70px" />
+      <a href="{{ friend.user.profile.get_absolute_url }}">
+        <img src="{{ friend.user.profile.image.url }}" class="rounded-circle cover" style="position: relative; height:70px; width:70px" />
       </a>
       <p>{{ friend.user.username }}</p>
     </div>
@@ -81,19 +81,26 @@
 
   <div class="">
     {% for post in posts %}
-    <div class="card" style="margin-bottom:20px">
-      <div class="row p-2">
+    <div class="card" style="margin-bottom:20px;">
+      <div class="row p-2" style="margin:0px;padding:0px;">
         <div class="top">
           <div class="userDetails">
               <div class="profile_img">
                 <a href="{{ post.user_name.profile.get_absolute_url }}"><img src="{{ post.user_name.profile.image.url }}" class="cover" alt=""></a>
               </div>
               <!-- Main Title -->
-              <h3>{{ post.user_name }}<br><span>{{ post.date_posted }}</span></h3>
+              <h3><a href="{{ post.user_name.profile.get_absolute_url }}" style="text-decoration:none; color:black;">{{ post.user_name }}</a><br><span>{{ post.date_posted }}</span></h3>
           </div>
           <div>
               <!-- Settings Dot -->
-              <div class="settings"></div>
+              <div class="btn-group dropleft">
+                <div class="settings" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
+               
+                <div class="dropdown-menu">
+                  <!-- Dropdown menu links -->
+                  <a class="dropdown-item" onclick="CopyText('{{ request.build_absolute_uri|cut:"/" }}{% url 'post-detail' post.id %}')" >copy link</a>
+                </div>
+              </div>
           </div>
         </div>
       </div>
@@ -172,5 +179,12 @@
         },
       });
     });
+  </script>
+  <script>
+    function CopyText(url) {
+    var text = url;
+    console.log(url);
+    document.execCommand('copy');
+  }
   </script>
   {% endblock jsfiles %}

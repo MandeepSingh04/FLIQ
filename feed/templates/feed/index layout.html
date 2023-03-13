@@ -28,7 +28,7 @@
   .nav-item{
     color:black;
   }
-  .active{
+  .nav-item.active{
     color:rgb(30, 16, 231);
   }
   a{
@@ -37,6 +37,9 @@
   .navbuttons{
       display: none;
     }
+  .mob{
+    display: block;
+  }
   @media screen and (max-width: 768px) {
     .webnav{
       display: none;
@@ -46,6 +49,9 @@
     }
     .navbuttons{
       display: block;
+    }
+    .mob{
+      display: none;
     }
 }
 </style>
@@ -100,7 +106,7 @@
     </div>
   </div>
   <div class="" >
-    <div class="row" style="width:100%;margin:0px">
+    <div class="row" style="width:100%;margin:0px;">
       <div class="col-md-3 webcontent p-0" >
         <div class="p-3 navblock"><a class="nav-item" href="{% url 'home' %}">FLIQ</a></div>
         <div class="p-3 navblock"><a class="nav-item active" href="{% url 'home' %}"><i class="bi bi-house-fill"></i> Home</a></div>
