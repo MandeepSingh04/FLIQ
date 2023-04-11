@@ -98,7 +98,7 @@
                
                 <div class="dropdown-menu">
                   <!-- Dropdown menu links -->
-                  <a class="dropdown-item" onclick="CopyText('{{ request.build_absolute_uri|cut:"/" }}{% url 'post-detail' post.id %}')" >copy link</a>
+                  <a class="dropdown-item" onclick="CopyText('{{ request.build_absolute_uri|cut:request.get_full_path }}{% url 'post-detail' post.id %}')" >copy link</a>
                 </div>
               </div>
           </div>
@@ -184,7 +184,12 @@
     function CopyText(url) {
     var text = url;
     console.log(url);
+    var tempInput = document.createElement('input');
+    tempInput.setAttribute('value', url);
+    document.body.appendChild(tempInput);
+    tempInput.select();
     document.execCommand('copy');
+    document.body.removeChild(tempInput);
   }
   </script>
   {% endblock jsfiles %}

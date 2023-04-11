@@ -127,4 +127,16 @@
     });
   });
 </script>
+<script>
+  function CopyText(url) {
+  var text = url;
+  console.log(url);
+  var tempInput = document.createElement('input');
+  tempInput.setAttribute('value', url);
+  document.body.appendChild(tempInput);
+  tempInput.select();
+  document.execCommand('copy');
+  document.body.removeChild(tempInput);
+}
+</script>
 {% endblock jsfiles %}

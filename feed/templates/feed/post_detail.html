@@ -1,6 +1,6 @@
 {% extends "feed/layout.html" %} {% load static %} {% load crispy_forms_tags %}
 {% block searchform %}
-<form
+{% comment %} <form
   class="form-inline my-2 my-lg-0 ml-5"
   action="{% url 'search' %}"
   method="get"
@@ -9,31 +9,88 @@
   <button class="btn btn-success my-2 my-sm-0 ml-4" type="submit">
     Search
   </button>
-</form>
-{% endblock searchform %} {% block content %}
+</form> {% endcomment %}
+{% endblock searchform %} 
+{% block content %}
+
+<style>
+  
+  .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+  
+  .userDetails {
+      display: flex;
+      align-items: center;
+  }
+  
+  .profile_img {
+      position: relative;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-right: 8px;
+  }
+  
+  .cover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+  }
+  
+  .card .top .userDetails h3 {
+      font-size: 16px;
+      color: #4d4d4d;
+      font-weight: 500;
+      line-height: 1em;
+  }
+  
+  .card .top .userDetails h3 span {
+      font-size: 0.7em;
+  }
+  
+  .settings:after {
+      content: '\2807';
+      font-size: 25px;
+      color: #4d4d4d;
+      cursor: pointer;
+  }
+  
+
+  </style>
+
+
 <div class="container">
   <div class="row">
     <div class="col-md-8">
       <div class="card card-signin my-5">
         <div class="card-body">
-          <a href="{{ post.user_name.profile.get_absolute_url }}"
-            ><img
-              src="{{ post.user_name.profile.image.url }}"
-              class="rounded-circle"
-              width="30"
-              height="30"
-              alt=""
-          /></a>
-          <a
-            class="text-dark"
-            href="{{ post.user_name.profile.get_absolute_url }}"
-            ><b>{{ post.user_name }}</b></a
-          >
-          <br /><small class="text-muted"
-            >Posted on {{ post.date_posted }}</small
-          >
-          <br /><br />
-          <p class="card-text text-dark">{{ post.description }}</p>
+          <div class="top" style="width:100%">
+            <div class="userDetails">
+                <div class="profile_img">
+                  <a href="{{ post.user_name.profile.get_absolute_url }}"><img src="{{ post.user_name.profile.image.url }}" class="cover" alt=""></a>
+                </div>
+                <!-- Main Title -->
+                <h3><a href="{{ post.user_name.profile.get_absolute_url }}" style="text-decoration:none; color:black;">{{ post.user_name }}</a><br><span>{{ post.date_posted }}</span></h3>
+            </div>
+            <div>
+                <!-- Settings Dot -->
+                <div class="btn-group dropleft">
+                  <div class="settings" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
+                 
+                  <div class="dropdown-menu">
+                    <!-- Dropdown menu links -->
+                    <a class="dropdown-item" onclick="CopyText('{{ request.build_absolute_uri|cut:request.get_full_path }}{% url 'post-detail' post.id %}')" >copy link</a>
+                  </div>
+                </div>
+            </div>
+          </div>
         </div>
         <a href="{{ post.pic.url }}"
           ><img class="card-img-top" src="{{ post.pic.url }}" alt=""
@@ -161,6 +218,18 @@
       },
     });
   });
+</script>
+<script>
+  function CopyText(url) {
+  var text = url;
+  console.log(url);
+  var tempInput = document.createElement('input');
+  tempInput.setAttribute('value', url);
+  document.body.appendChild(tempInput);
+  tempInput.select();
+  document.execCommand('copy');
+  document.body.removeChild(tempInput);
+}
 </script>
 
 {% endblock jsfiles %}
