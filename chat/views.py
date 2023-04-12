@@ -15,7 +15,8 @@ def chat(request):
 def room(request, room):
     p = request.user.profile
     friends = p.friends.all()
-    chat_user = request.user
+    name = room.replace(request.user.username, '').replace('-', '')
+    chat_user = User.objects.get(username=name)
     try:
         room_details = Room.objects.get(name=room)
     except Room.DoesNotExist:
