@@ -125,24 +125,31 @@
 
             <ul class="list-unstyled mb-0">
               {% if friends %}
-              {% for user_p in friends %}
+              {% for user_p, chat_details in friends %}
               <li class="p-2 border-bottom" >
                 {% if request.user.username < user_p.user.username %}
                 <a href="{{ request.build_absolute_uri|cut:request.get_full_path }}/chat/{{ request.user.username }}-{{ user_p }}" class="d-flex justify-content-between">
                 {% else %}
                   <a href="{{ user_p.user }}-{{ request.user.username }}" class="d-flex justify-content-between">
                 {% endif %}
-                  <div class="d-flex flex-row">
+                    <div class="d-flex flex-row">
                     <img src="{{ user_p.image.url }}" alt="avatar"
                       class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60">
                     <div class="pt-1">
                       <p class="fw-bold mb-0">{{ user_p }}</p>
-                      <p class="small text-muted">Tap to chat</p>
+                      {% if chat_details.0 > 0 %}
+                      <p class="small text-muted"><strong>{{ chat_details.1 }}</strong></p>
+                      {% else %}
+                      <p class="small text-muted">{{ chat_details.1 }}</p>
+                      {% endif %}
                     </div>
                   </div>
                   <div class="pt-1">
-                    <p class="small text-muted mb-1">Just now</p>
-                    <span class="badge bg-danger float-end">1</span>
+                    {% comment %} time {% endcomment %}
+                    <p class="small text-muted mb-1">{{ chat_details.2|timesince }}</p> 
+                    {% if chat_details.0 > 0 %}
+                    <span class="badge bg-danger float-end">{{ chat_details.0 }}</span>
+                    {% endif %}
                   </div>
                 </a>
               </li>
@@ -188,7 +195,7 @@
       
       <div class="" style="height:60vh;overflow-x: hidden; overflow-y: auto;display: flex; flex-direction: column-reverse;">
         <ul class="list-unstyled">
-        <div id="display" >
+          <div id="display" >
           
 
           <!-- <div class="container darker">
@@ -196,6 +203,10 @@
             <span class="time-left">20th, April 2021</span>
           </div> -->
           
+          </div>
+          
+          <div id="display-unread">
+
           </div>
           
         </ul>
@@ -237,6 +248,22 @@
                   temp='<li class="d-flex justify-content-start mb-4"><div class="card"><div class="px-2"><p class="mb-0">'+response.messages[key].value+'</p></div><div class="d-flex flex-row-reverse px-2"><p class="text-muted small mb-0 ">'+response.messages[key].date.substr(0,10)+' '+response.messages[key].date.substr(11,5)+'</p></div></div></li>';
                 }
                 $("#display").append(temp);
+              }
+              $("#display-unread").empty();
+              if(response.unread_messages.length>0){
+                $("#display-unread").append('<p class="card-header d-flex justify-content-center m-3" style="background-color:#d0d0d0">unread</p>');
+              }
+              for (var key in response.unread_messages)
+              {
+                var temp='<li class="d-flex justify-content-end mb-4"><div class="card"><div class="card-header d-flex justify-content-between p-3"><p class="fw-bold mb-0">'+response.unread_messages[key].name+'</p><p class="text-muted small mb-0"><i class="far fa-clock"></i>'+response.unread_messages[key].date+'</p></div><div class="card-body"><p class="mb-0">'+response.unread_messages[key].value+'</p></div></div><img src="'+response.unread_messages[key].image+'" alt="avatar"class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60"></li>';
+                if( "{{request.user.username}}" == response.unread_messages[key].username){
+                  temp='<li class="d-flex justify-content-end mb-4"><div class="card"><div class="card-header d-flex justify-content-between p-3"><p class="fw-bold mb-0">'+response.unread_messages[key].name+'</p><p class="text-muted small mb-0"><i class="far fa-clock"></i>'+response.unread_messages[key].date+'</p></div><div class="card-body"><p class="mb-0">'+response.unread_messages[key].value+'</p></div></div><img src="'+response.unread_messages[key].image+'" alt="avatar"class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60" ></li>';
+                  temp='<li class="d-flex justify-content-end mb-4"><div class="card"><div class="px-2"><p class="mb-0">'+response.unread_messages[key].value+'</p></div><div class="d-flex flex-row-reverse px-2"><p class="text-muted small mb-0 ">'+response.unread_messages[key].date.substr(0,10)+' '+response.unread_messages[key].date.substr(11,5)+'</p></div></div></li>';
+                }
+                else{
+                  temp='<li class="d-flex justify-content-start mb-4"><div class="card"><div class="px-2"><p class="mb-0">'+response.unread_messages[key].value+'</p></div><div class="d-flex flex-row-reverse px-2"><p class="text-muted small mb-0 ">'+response.unread_messages[key].date.substr(0,10)+' '+response.unread_messages[key].date.substr(11,5)+'</p></div></div></li>';
+                }
+                $("#display-unread").append(temp);
               }
           },
           error: function(response){

@@ -111,10 +111,10 @@
             {% if post in liked_post %}
             <a href="{% url 'post-like' %}" style="color: red" id="likebtn{{ post.id }}">
               Unlike</a>
-            | {{post.likes.count}} {% else %}
+            | <span id="likes{{ post.id }}">{{post.likes.count}}</span> {% else %}
             <a href="{% url 'post-like' %}" style="color: green" id="likebtn{{ post.id }}">
               Like</a>
-            | {{post.likes.count}} {% endif %}
+            | <span id="likes{{ post.id }}">{{post.likes.count}}</span> {% endif %}
           </button>
           <a class="btn btn-outline-info" href="{% url 'post-detail' post.id %}">Comments | {{ post.details.count }}</a>
         </div>
@@ -174,12 +174,16 @@
       },
       success: function (response) {
         if (response.liked) {
-          $("#likebtn" + id).html("Unlike");
-          $("#likebtn" + id).css("color", "red");
-        } else {
-          $("#likebtn" + id).html("Like");
-          $("#likebtn" + id).css("color", "green");
-        }
+            $("#likebtn" + id).html("Unlike");
+            $("#likebtn" + id).css("color", "red");
+            var likes = parseInt($("#likes" + id).html());
+            $("#likes" + id).html(likes+1);
+          } else {
+            $("#likebtn" + id).html("Like");
+            $("#likebtn" + id).css("color", "green");
+            var likes = parseInt($("#likes" + id).html());
+            $("#likes" + id).html(likes-1);
+          }
       },
     });
   });

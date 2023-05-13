@@ -16,3 +16,8 @@ class Message(models.Model):
     image = models.ImageField(default='default.png', upload_to='profile_pics')
     slug = AutoSlugField(populate_from='user')
     room = models.CharField(max_length=10000000)
+    read = models.BooleanField(default=False)
+
+    def mark_as_read(self):
+        self.read = True
+        self.save()
