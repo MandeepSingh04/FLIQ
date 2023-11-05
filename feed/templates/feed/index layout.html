@@ -40,9 +40,15 @@
   .mob{
     display: block;
   }
+  .mobnav{
+    display:none;
+  }
   @media screen and (max-width: 768px) {
     .webnav{
       display: none;
+    }
+    .mobnav{
+      display:block;
     }
     .webcontent{
       display: none;
@@ -56,7 +62,7 @@
 }
 </style>
 <body style="background-color: #f3f3f3">
-  <div class="webnav" style="width: 100vw;background-color:rgb(255, 255, 255); position: fixed; z-index:2;">
+  <div class="webnav" id="webnavbar" style="width: 100vw;background-color:rgb(255, 255, 255); position: fixed; z-index:2;">
     <div class="row" style="">
       <div class="col-md-4 d-flex align-items-center" style="font-size:23px">
         <a class="nav-item navbar-brand ml-4 mr-4" href="/"><b>FLIQ</b></a>
@@ -201,6 +207,16 @@
     window.addEventListener ("load", function() {
       $('.loader').fadeOut();
     });
+    var prevScrollpos = window.pageYOffset;
+window.onscroll = function() {
+var currentScrollPos = window.pageYOffset;
+  if (prevScrollpos > currentScrollPos) {
+    document.getElementById("webnavbar").style.top = "0";
+  } else {
+    document.getElementById("webnavbar").style.top = "-80px";
+  }
+  prevScrollpos = currentScrollPos;
+}
   </script>
 </body>
 
