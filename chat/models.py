@@ -7,6 +7,9 @@ from autoslug import AutoSlugField
 class Room(models.Model):
     name = models.CharField(max_length=1000)
 
+    def __str__(self):
+        return str(self.name)
+
 class Message(models.Model):
     value = models.CharField(max_length=1000000)
     date = models.DateTimeField(default=datetime.now, blank=True)
@@ -16,8 +19,11 @@ class Message(models.Model):
     image = models.ImageField(default='default.png', upload_to='profile_pics')
     slug = AutoSlugField(populate_from='user')
     room = models.CharField(max_length=10000000)
-    read = models.BooleanField(default=False)
+    read = models.CharField(max_length=1000000)
 
     def mark_as_read(self):
-        self.read = True
+        self.read = "all"
         self.save()
+    
+    def __str__(self):
+        return str(self.room + " : " + self.name + "-" + self.value)
