@@ -10,8 +10,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Post, Comments, Like
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
-from users.models import Profile
+from users.models import Profile,FriendRequest
 from django.utils.decorators import method_decorator
+from django.template.loader import render_to_string
+import boto3
+import random
+from django.conf import settings
 
 import json
 
@@ -26,10 +30,38 @@ class PostListView(ListView):
         context = super(PostListView, self).get_context_data(**kwargs)
         if self.request.user.is_authenticated:
             p = Profile.objects.get(user=self.request.user)
-            friends = p.friends.all()
-            context['friends'] = friends
+            p_friends = p.friends.all()
+            context['friends'] = p_friends
             liked = [i for i in Post.objects.all() if Like.objects.filter(user = self.request.user, post=i)]
             context['liked_post'] = liked
+            users = Profile.objects.exclude(user=self.request.user)
+            sent_friend_requests = FriendRequest.objects.filter(from_user=self.request.user)
+            rec_friend_requests = FriendRequest.objects.filter(to_user=self.request.user)
+            my_friends = self.request.user.profile.friends.all()
+
+            friends = []
+            sent_to = []
+
+            for user in my_friends:
+                friends.extend(user.friends.all())
+
+            friends = list(set(friends) - set(my_friends) - {self.request.user.profile})
+
+            sent_to = [friend_request.to_user for friend_request in sent_friend_requests]
+
+            suggestions=[]
+            for user in users:
+                mutual_friends = list(set(user.friends.all()) & set(my_friends))
+                if user not in my_friends and user not in sent_to and user not in my_friends:
+                    suggestions.append({
+                        'user': user,
+                        'mutual_friends': mutual_friends,
+                    })
+
+            context['users'] = friends
+            context['sent'] = sent_to
+            context['suggestions'] = suggestions
+
         return context
 
 class UserPostListView(LoginRequiredMixin, ListView):
@@ -136,6 +168,8 @@ class explore_posts(ListView):
             liked = [i for i in Post.objects.all() if Like.objects.filter(user = self.request.user, post=i).exists()]
             context['liked_post'] = liked
         return context
+
+
 
 @login_required
 def like(request):

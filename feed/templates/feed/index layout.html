@@ -62,30 +62,30 @@
 }
 </style>
 <body style="background-color: #f3f3f3">
-  <div class="webnav" id="webnavbar" style="width: 100vw;background-color:rgb(255, 255, 255); position: fixed; z-index:2;">
+  <div class="webnav" style="width: 100vw;background-color:rgb(255, 255, 255); position: fixed; z-index:2;">
     <div class="row" style="">
-      <div class="col-md-4 d-flex align-items-center" style="font-size:23px">
+      <div class="col-md-4 d-flex align-items-center">
         <a class="nav-item navbar-brand ml-4 mr-4" href="/"><b>FLIQ</b></a>
       </div>
-      <div class="col-md-4 d-flex justify-content-between align-items-center border-bottom" style="font-size:23px">
-        <a class="p-3 nav-item active" href="{% url 'home' %}"><i class="bi bi-house-fill"></i></a>
-        <a class="p-3 nav-item" href="{% url 'explore' %}"><i class="bi bi-compass-fill"></i></a>
-        <a class="p-3 nav-item" href="{% url 'post-create' %}"><i class="bi bi-plus-circle-fill"></i></a>
-        <a class="p-3 nav-item" href="{% url 'users_list' %}"><i class="bi bi-person-plus-fill"></i></a>
-        <a class="p-3 nav-item" href="{% url 'my_profile' %}"><i class="bi bi-person-circle"></i></a>
+      <div class="col-md-4 d-flex justify-content-between align-items-center border-bottom" style="font-size:19px">
+        <a class="p-2 nav-item {% block homeactive %}{% endblock homeactive %}" href="{% url 'home' %}"><i class="bi bi-house-fill"></i></a>
+        <a class="p-2 nav-item {% block exploreactive %}{% endblock exploreactive %}" href="{% url 'explore' %}"><i class="bi bi-compass-fill"></i></a>
+        <a class="p-2 nav-item {% block newpostactive %}{% endblock newpostactive %}" href="{% url 'post-create' %}"><i class="bi bi-plus-circle-fill"></i></a>
+        <a class="p-2 nav-item {% block adduseractive %}{% endblock adduseractive %}" href="{% url 'users_list' %}"><i class="bi bi-heart-fill"></i></a>
+        <a class="p-2 nav-item myprofile {% block myprofileactive %}{% endblock myprofileactive %}" href="{{ request.user.profile.get_absolute_url }}"><i class="bi bi-person-circle"></i></a>
         {% if user.is_authenticated %}
         {% endif %} 
       </div>
-      <div class="col-md-4 d-flex justify-content-end align-items-center" style="font-size:23px">
+      <div class="col-md-4 d-flex justify-content-end"style="font-size:19px">
         {% block searchform %}{% endblock searchform %}
         {% if user.is_authenticated %}
-        <a class="p-3 nav-item" href="{% url 'search' %}"><i class="bi bi-search"></i></a>
-        <a class="p-3 nav-item" href="{% url 'chat' %}"><i class="bi bi-chat-right-text-fill"></i></a>
-        <a class="p-3 nav-item" href="{% url 'my_profile' %}"><i class="bi bi-person-circle"></i></a>
+        <a class="p-2 mr-2 nav-item {% block searchactive %}{% endblock searchactive %}" href="{% url 'search' %}"><i class="bi bi-search"></i></a>
+        <a class="p-2 mr-2 nav-item {% block chatactive %}{% endblock chatactive %}" href="{% url 'chat' %}"><i class="bi bi-chat-right-text-fill"></i></a>
+        <a class="p-2 mr-2 nav-item" href="{{ request.user.profile.get_absolute_url }}"><i class="bi bi-person-circle"></i></a>
         {% comment %} <a class="m-2 nav-item btn btn-danger text-light" href="{% url 'logout' %}">Logout</a> {% endcomment %}
         {% else %}
-        <a class="mx-3 nav-item btn btn-success  text-light" href="{% url 'login' %}">Login</a>
-        <a class="mx-3 nav-item btn btn-info  text-light" href="{% url 'register' %} ">Register</a>
+        {% comment %} <a class="mx-3 nav-item btn btn-success  text-light" href="{% url 'login' %}">Login</a>
+        <a class="mx-3 nav-item btn btn-info  text-light" href="{% url 'register' %} ">Register</a> {% endcomment %}
         {% endif %} 
       </div>
     </div>
@@ -98,11 +98,11 @@
       <div class="col-6 d-flex justify-content-between align-items-center" style="font-size:23px">
         
       </div>
-      <div class="col-3 d-flex justify-content-end" style="font-size:23px">
+      <div class="col-3 d-flex justify-content-end align-items-center">
         {% if user.is_authenticated %}
-        <a class="p-3 nav-item" href="{% url 'search' %}"><i class="bi bi-search"></i></a>
-        <a class="p-3 nav-item" href="{% url 'chat' %}"><i class="bi bi-chat-right-text-fill"></i></a>
-        <a class="p-3 nav-item" href="{% url 'my_profile' %}"><i class="bi bi-person-circle"></i></a>
+        <a class="px-3 nav-item" href="{% url 'search' %}"><i class="bi bi-search"></i></a>
+        <a class="px-3 nav-item" href="{% url 'chat' %}"><i class="bi bi-chat-right-text-fill"></i></a>
+        <a class="px-3 nav-item" href="{{ request.user.profile.get_absolute_url }}"><i class="bi bi-person-circle"></i></a>
         {% comment %} <a class="m-2 nav-item btn btn-danger text-light" href="{% url 'logout' %}">Logout</a> {% endcomment %}
         {% else %}
         <a class="mx-3 nav-item btn btn-success  text-light" href="{% url 'login' %}">Login</a>
@@ -121,7 +121,7 @@
         <div class="p-3 navblock"><a class="nav-item" href="{% url 'users_list' %}"><i class="bi bi-person-plus-fill"></i> Add New Friends</a></div>
         {% if user.is_authenticated %}
         <div class="p-3 navblock"><a class="nav-item" href="{% url 'friend_list' %}"><i class="bi bi-people-fill"></i> Friends</a></div>
-        <div class="p-3 navblock"><a class="nav-item" href="{% url 'my_profile' %}"><i class="bi bi-person-circle"></i> Profile</a></div>
+        <div class="p-3 navblock"><a class="nav-item" href="{{ request.user.profile.get_absolute_url }}"><i class="bi bi-person-circle"></i> Profile</a></div>
         <div class="p-3 navblock"><a class="nav-item" href="{% url 'post-create' %}"><i class="bi bi-plus-circle-fill"></i> Create Post</a></div>
         <div class="p-3 navblock"><a class="nav-item" href="{% url 'chat' %}"><i class="bi bi-chat-right-text-fill"></i> Chat</a></div>
         <div class="p-3 navblock"><a class="nav-item" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i> Logout</a></div>
@@ -169,6 +169,52 @@
             <p class="card-text text-center">{{ request.user.profile.bio }}</p>
           </div>
         </div>
+
+        <div class="">
+          <div class="p-1 mb-3">
+            <span class="">Suggested for you</span>
+            <div class="" style="float: right;">
+              <a href="#" class="">see all</a>
+            </div>
+          </div>
+          {% if suggestions %}
+            {% for user_p in suggestions %}
+            <div class="p-2">
+              <div class="" style="display:inline-flex; width:100%">
+                <div class="p-0" style="max-width:max-content">
+                  <a href="{{ user_p.user.get_absolute_url }}">
+                    <img src="{{ user_p.user.image.url }}" class="rounded-circle cover" style="position: relative; height:50px; width:50px" alt=""/>
+                  </a>
+                </div>
+                <div class="ml-2" style="width:100%">
+                  <a class="text-dark" style="display: inline-flex;height: 50%;align-items: center;" href="{{ user_p.user.get_absolute_url }}"><b>{{ user_p.user }}</b></a>
+                  <div class="ml-2" style="display: inline-flex; float: right; height: 50%; align-items: center;">
+                    <a class="follow" href="{% url 'send_friend_request' user_p.user.user.id %}">Add Friend</a>
+                  </div>
+                  <div style="width:100%;">
+                    {% if user_p.mutual_friends %}
+                    {% if user_p.mutual_friends|length > 1 %}
+                    <p class="card-text text-dark">Followed by {{ user_p.mutual_friends.0}} + {{ user_p.mutual_friends|length|add:"-1" }} more</p>
+                    {% else %}
+                    <p class="card-text text-dark">Followed by {{ user_p.mutual_friends.0}}</p>
+                    {% endif %}
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <h5><i>No new people to add now! Please come back later!</i></h5>
+          {% endif %}
+          
+          <footer class="footer page-footer font-small black">
+            <div class="footer-copyright text-center py-3 mb-5">
+              FLIQ © 2023 <br /><small class="text-muted">All rights reserved!</small>
+            </div>
+          </footer>
+        </div>
+
       </div>
     </div>
   </div>
@@ -176,12 +222,12 @@
     <div class="row" style="">
       <div class="col-md-3 d-flex align-items-center">
       </div>
-      <div class="col-md-6 d-flex justify-content-between align-items-center border-bottom" style="font-size:23px">
-        <a class="p-3 nav-item active" href="{% url 'home' %}"><i class="bi bi-house-fill"></i></a>
-        <a class="p-3 nav-item" href="{% url 'explore' %}"><i class="bi bi-compass-fill"></i></a>
-        <a class="p-3 nav-item" href="{% url 'post-create' %}"><i class="bi bi-plus-circle-fill"></i></a>
-        <a class="p-3 nav-item" href="{% url 'users_list' %}"><i class="bi bi-person-plus-fill"></i></a>
-        <a class="p-3 nav-item" href="{% url 'my_profile' %}"><i class="bi bi-person-circle"></i></a>
+      <div class="col-md-6 d-flex justify-content-between align-items-center border-bottom" style="font-size:19px">
+        <a class="py-2 px-3 nav-item active" href="{% url 'home' %}"><i class="bi bi-house-fill"></i></a>
+        <a class="py-2 px-3 nav-item" href="{% url 'explore' %}"><i class="bi bi-compass-fill"></i></a>
+        <a class="py-2 px-3 nav-item" href="{% url 'post-create' %}"><i class="bi bi-plus-circle-fill"></i></a>
+        <a class="py-2 px-3 nav-item" href="{% url 'users_list' %}"><i class="bi bi-heart-fill"></i></a>
+        <a class="py-2 px-3 nav-item" href="{{ request.user.profile.get_absolute_url }}"><i class="bi bi-person-circle"></i></a>
         {% if user.is_authenticated %}
         {% endif %} 
       </div>
@@ -190,14 +236,8 @@
     </div>
   </div>
 
-  <footer class="footer page-footer font-small black">
-    <div class="footer-copyright text-center py-3">
-      FLIQ © 2023 <br /><small class="text-muted">All rights reserved!</small>
-    </div>
-  </footer>
-
   <!-- JS Files -->
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>

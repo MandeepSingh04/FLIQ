@@ -61,20 +61,23 @@
       color: #4d4d4d;
       cursor: pointer;
   }
-  
+  .post > div > button{
+    background-color:transparent;
+  }
 
   </style>
 
 
-<div class="container">
+<div class="mt-3 mt-md-5">
   <div class="row">
+    <div class="col-md-2"></div>
     <div class="col-md-8">
-      <div class="card card-signin my-5">
-        <div class="card-body">
+      <div class="card post" style="border-radius:0%;">
+        <div class="p-1">
           <div class="top" style="width:100%">
             <div class="userDetails">
                 <div class="profile_img">
-                  <a href="{{ post.user_name.profile.get_absolute_url }}"><img src="{{ post.user_name.profile.image.url }}" class="cover" alt=""></a>
+                  <img src="{{ post.user_name.profile.image.url }}" class="cover" alt="">
                 </div>
                 <!-- Main Title -->
                 <h3><a href="{{ post.user_name.profile.get_absolute_url }}" style="text-decoration:none; color:black;">{{ post.user_name }}</a><br><span>{{ post.date_posted }}</span></h3>
@@ -92,106 +95,106 @@
             </div>
           </div>
         </div>
-        <a href="{{ post.pic.url }}"
-          ><img class="card-img-top" src="{{ post.pic.url }}" alt=""
-        /></a>
-        {% if post.tags %}
-        <br />
-        <p class="text-danger ml-3">
-          <b>Tags: <i>{{ post.tags }}</i></b>
+        <img class="card-img-top post-img" ondblclick="PostLiked({{ post.id }},event)" src="{{ post.pic.url }}" alt="" />
+        <p class="card-text text-dark p-3 m-0">
+          <b>{{ post.user_name }}</b> {{ post.description }}
+          <br>
+  
+          {% if post.tags %}
+          <span class="text-danger">
+            <b>Tags: <i>{{ post.tags }}</i></b>
+          </span>
+          {% endif %}
         </p>
-        {% endif %}
-        <div class="card-footer">
-          <button class="btn btn-white mr-3 like" id="{{ post.id }}">
+        <hr style="margin:0px">
+        <div class="p-1">
+          <button class="btn btn-white mr-1 like" id="{{ post.id }}">
             {% if is_liked %}
             <a href="{% url 'post-like' %}" style="color: red" id="likebtn{{ post.id }}">
-              Unlike</a>
-            | <span id="likes{{ post.id }}">{{post.likes.count}}</span> {% else %}
-            <a href="{% url 'post-like' %}" style="color: green" id="likebtn{{ post.id }}">
-              Like</a>
-            | <span id="likes{{ post.id }}">{{post.likes.count}}</span> {% endif %}
+              <i class="bi bi-heart-fill"></i></a>
+            <span id="likes{{ post.id }}">{{post.likes.count}}</span> 
+            {% else %}
+            <a href="{% url 'post-like' %}" style="color: black" id="likebtn{{ post.id }}">
+              <i class="bi bi-heart"></i></a>
+            <span id="likes{{ post.id }}">{{post.likes.count}}</span> 
+            {% endif %}
           </button>
-
-          {% if post.user_name == user %}
-          <a
-            class="btn btn-outline-info mr-3"
-            href="{% url 'post-update' post.id %}"
-            >Update</a
-          >
-          <a
-            class="btn btn-outline-danger"
-            href="{% url 'post-delete' post.id %}"
-            >Delete</a
-          >
-          {% endif %}
+          <button class="btn btn-white mr-1">
+            <a class="" style="color:black;" href="{% url 'post-detail' post.id %}"><i class="bi bi-chat"></i></a>
+          </button>
+          <button class="btn btn-white mr-1">
+            <a class="" style="color:black;" href="{% url 'post-detail' post.id %}"><i class="bi bi-share"></i></a>
+          </button>
+          <div class="btn btn-white" style="float: right;">
+            <a class="" style="font-size: small;color: #524f4f;">
+              {{ post.details.count }} {% if post.details.count > 0 and post.details.count < 2 %}comment{% else %}comments{% endif %}
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-  <br />
-  <h4>Comments</h4>
-  <div class="row">
-    <div class="col-md-8">
-      <div class="card card-signin my-5">
-        <div class="card-body">
-          <form class="form-signin" method="POST" id="post-form">
-            {% csrf_token %}
-            <fieldset class="form-group">
-              <br />
-              {{ form }}
-            </fieldset>
-            <div class="form-group">
-              <button
-                class="btn btn-lg btn-primary btn-block text-uppercase"
-                type="submit"
-              >
-                Comment</button
-              ><br />
+    
+      <br />
+          <div class="mb-2">
+            <div class="p-1">
+              <form class="" method="POST" id="post-form">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    {{ form.comment }}
+                  <div class="input-group-append">
+                    <button class="btn btn-primary" type="button">Comment</button>
+                  </div>
+                </div>
+              </form>
             </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-8">
-      {% if post.details.all %}
-      <div class="card card-signin my-5">
-        {% for detail in post.details.all %}
-        <div class="card-body">
-          <a href="{{ detail.username.profile.get_absolute_url }}">
-            <img
-              src="{{ detail.username.profile.image.url }}"
-              class="rounded-circle"
-              width="30"
-              height="30"
-              alt=""
-            />
-          </a>
-          <a
-            class="text-dark"
-            href="{{ detail.username.profile.get_absolute_url }}"
-            ><b>{{ detail.username }}</b></a
-          >
-          <br /><small>{{ detail.comment_date }}</small><br /><br />
-          <p class="card-text text-dark">{{ detail.comment }}</p>
-        </div>
-        <hr class="my-1" />
-        {% endfor %}
-      </div>
-      {% else %}
-      <p>No comments to show!</p>
-      {% endif %}
+          </div>
+          <h5 class="ml-2 mx-md-0 mb-2">Comments</h5>
+          {% if post.details.all %}
+          <div class="card ">
+            {% for detail in post.details.all %}
+            <div class="p-2">
+              <div class="row m-1">
+                <div class="" style="max-width:max-content">
+                  <a href="{{ detail.username.profile.get_absolute_url }}">
+                    <img src="{{ detail.username.profile.image.url }}" class="rounded-circle" width="30" height="30"alt=""/>
+                  </a>
+                </div>
+                <div class="ml-2" style="max-width:100%">
+                  <a class="text-dark" style="display: inline-flex;height: 50%;align-items: center;" href="{{ detail.username.profile.get_absolute_url }}"><b>{{ detail.username }}</b></a>
+                  <div class="ml-2" style="display: inline-flex; float: right; height: 50%; align-items: center;">
+                    <small>{{ detail.comment_date }}</small>
+                  </div>
+                  <div style="width:100%;">
+                    <p class="card-text text-dark mt-1">{{ detail.comment }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr class="my-1" />
+            {% endfor %}
+          </div>
+          {% else %}
+          <p>No comments to show!</p>
+          {% endif %}
     </div>
   </div>
 </div>
 {% endblock content %} {% block jsfiles %}
 <script>
+  function PostLiked(id,e){
+    console.log("clicked");
+    var id = id;
+    var href = $(".like").find("a").attr("href");
+    e.preventDefault();
+    likeBtn(id,href);
+  }
   $(".like").click(function (e) {
     var id = this.id;
     var href = $(".like").find("a").attr("href");
     e.preventDefault();
+    likeBtn(id,href);
+  });
 
+  function likeBtn(id,href){
     $.ajax({
       url: href,
       data: {
@@ -199,21 +202,24 @@
       },
       success: function (response) {
         if (response.liked) {
-          $("#likebtn" + id).html("Unlike");
+          $("#likebtn" + id).html('<i class="bi bi-heart-fill"></i>');
           $("#likebtn" + id).css("color", "red");
           var likes = parseInt($("#likes" + id).html());
           $("#likes" + id).html(likes+1);
         } else {
-          $("#likebtn" + id).html("Like");
+          $("#likebtn" + id).html('<i class="bi bi-heart"></i>');
           $("#likebtn" + id).css("color", "green");
           var likes = parseInt($("#likes" + id).html());
           $("#likes" + id).html(likes-1);
         }
       },
     });
-  });
+  }
 </script>
 <script>
+  var comm = document.getElementById("id_comment");
+  comm.classList.add("form-control");
+  comm.placeholder = "Add a comment here";
   function CopyText(url) {
   var text = url;
   console.log(url);

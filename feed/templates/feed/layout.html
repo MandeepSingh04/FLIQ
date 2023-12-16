@@ -54,21 +54,21 @@
       <div class="col-md-4 d-flex align-items-center">
         <a class="nav-item navbar-brand ml-4 mr-4" href="/"><b>FLIQ</b></a>
       </div>
-      <div class="col-md-4 d-flex justify-content-between align-items-center border-bottom" style="font-size:23px">
-        <a class="p-3 nav-item {% block homeactive %}{% endblock homeactive %}" href="{% url 'home' %}"><i class="bi bi-house-fill"></i></a>
-        <a class="p-3 nav-item {% block exploreactive %}{% endblock exploreactive %}" href="{% url 'explore' %}"><i class="bi bi-compass-fill"></i></a>
-        <a class="p-3 nav-item {% block newpostactive %}{% endblock newpostactive %}" href="{% url 'post-create' %}"><i class="bi bi-plus-circle-fill"></i></a>
-        <a class="p-3 nav-item {% block adduseractive %}{% endblock adduseractive %}" href="{% url 'users_list' %}"><i class="bi bi-person-plus-fill"></i></a>
-        <a class="p-3 nav-item myprofile {% block myprofileactive %}{% endblock myprofileactive %}" href="{% url 'my_profile' %}"><i class="bi bi-person-circle"></i></a>
+      <div class="col-md-4 d-flex justify-content-between align-items-center border-bottom" style="font-size:19px">
+        <a class="p-2 nav-item {% block homeactive %}{% endblock homeactive %}" href="{% url 'home' %}"><i class="bi bi-house-fill"></i></a>
+        <a class="p-2 nav-item {% block exploreactive %}{% endblock exploreactive %}" href="{% url 'explore' %}"><i class="bi bi-compass-fill"></i></a>
+        <a class="p-2 nav-item {% block newpostactive %}{% endblock newpostactive %}" href="{% url 'post-create' %}"><i class="bi bi-plus-circle-fill"></i></a>
+        <a class="p-2 nav-item {% block adduseractive %}{% endblock adduseractive %}" href="{% url 'users_list' %}"><i class="bi bi-heart-fill"></i></a>
+        <a class="p-2 nav-item myprofile {% block myprofileactive %}{% endblock myprofileactive %}" href="{{ request.user.profile.get_absolute_url }}"><i class="bi bi-person-circle"></i></a>
         {% if user.is_authenticated %}
         {% endif %} 
       </div>
-      <div class="col-md-4 d-flex justify-content-end"style="font-size:23px">
+      <div class="col-md-4 d-flex justify-content-end"style="font-size:19px">
         {% block searchform %}{% endblock searchform %}
         {% if user.is_authenticated %}
-        <a class="p-3 nav-item {% block searchactive %}{% endblock searchactive %}" href="{% url 'search' %}"><i class="bi bi-search"></i></a>
-        <a class="p-3 nav-item {% block chatactive %}{% endblock chatactive %}" href="{% url 'chat' %}"><i class="bi bi-chat-right-text-fill"></i></a>
-        <a class="p-3 nav-item" href="{% url 'my_profile' %}"><i class="bi bi-person-circle"></i></a>
+        <a class="p-2 mr-2 nav-item {% block searchactive %}{% endblock searchactive %}" href="{% url 'search' %}"><i class="bi bi-search"></i></a>
+        <a class="p-2 mr-2 nav-item {% block chatactive %}{% endblock chatactive %}" href="{% url 'chat' %}"><i class="bi bi-chat-right-text-fill"></i></a>
+        <a class="p-2 mr-2 nav-item" href="{{ request.user.profile.get_absolute_url }}"><i class="bi bi-person-circle"></i></a>
         {% comment %} <a class="m-2 nav-item btn btn-danger text-light" href="{% url 'logout' %}">Logout</a> {% endcomment %}
         {% else %}
         {% comment %} <a class="mx-3 nav-item btn btn-success  text-light" href="{% url 'login' %}">Login</a>
@@ -85,11 +85,11 @@
       <div class="col-6 d-flex justify-content-between align-items-center" style="font-size:23px">
         
       </div>
-      <div class="col-3 d-flex justify-content-end">
+      <div class="col-3 d-flex justify-content-end align-items-center">
         {% if user.is_authenticated %}
-        <a class="p-3 nav-item" href="{% url 'search' %}"><i class="bi bi-search"></i></a>
-        <a class="p-3 nav-item" href="{% url 'chat' %}"><i class="bi bi-chat-right-text-fill"></i></a>
-        <a class="p-3 nav-item" href="{% url 'my_profile' %}"><i class="bi bi-person-circle"></i></a>
+        <a class="px-3 nav-item" href="{% url 'search' %}"><i class="bi bi-search"></i></a>
+        <a class="px-3 nav-item" href="{% url 'chat' %}"><i class="bi bi-chat-right-text-fill"></i></a>
+        <a class="px-3 nav-item" href="{{ request.user.profile.get_absolute_url }}"><i class="bi bi-person-circle"></i></a>
         {% comment %} <a class="m-2 nav-item btn btn-danger text-light" href="{% url 'logout' %}">Logout</a> {% endcomment %}
         {% else %}
         {% comment %} <a class="mx-3 nav-item btn btn-success  text-light" href="{% url 'login' %}">Login</a>
@@ -100,16 +100,17 @@
   </div>
   <div class="container" style="height:6vh"></div>
   {% block content %}{% endblock content %}
+  <div class="container" style="height:6vh"></div>
   <div class="navbuttons" style="width: 100vw;background-color:rgb(255, 255, 255); position: fixed; z-index:1;left: 0;bottom: 0;">
     <div class="row" style="">
       <div class="col-md-3 d-flex align-items-center">
       </div>
-      <div class="col-md-6 d-flex justify-content-between align-items-center border-bottom" style="font-size:23px">
-        <a class="p-3 nav-item {% block mobhomeactive %}{% endblock mobhomeactive %}" href="{% url 'home' %}"><i class="bi bi-house-fill"></i></a>
-        <a class="p-3 nav-item {% block mobexploreactive %}{% endblock mobexploreactive %}" href="{% url 'explore' %}"><i class="bi bi-compass-fill"></i></a>
-        <a class="p-3 nav-item {% block mobnewpostactive %}{% endblock mobnewpostactive %}" href="{% url 'post-create' %}"><i class="bi bi-plus-circle-fill"></i></a>
-        <a class="p-3 nav-item {% block mobadduseractive %}{% endblock mobadduseractive %}" href="{% url 'users_list' %}"><i class="bi bi-person-plus-fill"></i></a>
-        <a class="p-3 nav-item {% block mobmyprofileactive %}{% endblock mobmyprofileactive %}" href="{% url 'my_profile' %}"><i class="bi bi-person-circle"></i></a>
+      <div class="col-md-6 d-flex justify-content-between align-items-center border-bottom" style="font-size:19px">
+        <a class="py-2 px-3 nav-item {% block mobhomeactive %}{% endblock mobhomeactive %}" href="{% url 'home' %}"><i class="bi bi-house-fill"></i></a>
+        <a class="py-2 px-3 nav-item {% block mobexploreactive %}{% endblock mobexploreactive %}" href="{% url 'explore' %}"><i class="bi bi-compass-fill"></i></a>
+        <a class="py-2 px-3 nav-item {% block mobnewpostactive %}{% endblock mobnewpostactive %}" href="{% url 'post-create' %}"><i class="bi bi-plus-circle-fill"></i></a>
+        <a class="py-2 px-3 nav-item {% block mobadduseractive %}{% endblock mobadduseractive %}" href="{% url 'users_list' %}"><i class="bi bi-heart-fill"></i></a>
+        <a class="py-2 px-3 nav-item {% block mobmyprofileactive %}{% endblock mobmyprofileactive %}" href="{{ request.user.profile.get_absolute_url }}"><i class="bi bi-person-circle"></i></a>
         {% if user.is_authenticated %}
         {% endif %} 
       </div>
@@ -117,13 +118,6 @@
       </div>
     </div>
   </div>
-
-
-  <footer class="footer page-footer font-small black">
-    <div class="footer-copyright text-center py-3">
-      FLIQ © 2023 <br /><small class="text-muted">All rights reserved!</small>
-    </div>
-  </footer>
 
   <!-- JS Files -->
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>

@@ -8,22 +8,22 @@
 {% endblock searchform %}
 {% block content %}
 
-<div class="" style="width:100%; max-width:100vw; padding-top:10vh;">
-  <div class="row" style="overflow-x:auto; white-space: nowrap; width: 100%; display: flex; flex-wrap: nowrap;">
+<div class="mt-4 pt-3 mt-md-5 pt-md-4" style="width:100%; max-width:100vw;">
+  <div class="row d-none" style="overflow-x:auto; white-space: nowrap; width: 100%; display: flex; flex-wrap: nowrap;">
     <div class="text-center p-2" style="width:120px">
       <a href="{{ request.user.profile.get_absolute_url }}">
         <img src="{{ user.profile.image.url }}" class="rounded-circle cover" style="position: relative; height:70px; width:70px" />
       </a>
-      <p>{{ user.username }}</p>
+      <p class="mb-0">You</p>
     </div>
     {% for friend in friends %}
-    <div class="text-center p-2" style="width:120px">
-      <a href="{{ friend.user.profile.get_absolute_url }}">
+    <div class="text-center p-2" style="width:120px;">
+      <a href="{{ friend.user.profile.get_absolute_url }}" style="display: flex; justify-content: center;">
         <div class="story">
-        <img src="{{ friend.user.profile.image.url }}" class="rounded-circle cover" style="position: relative; height:70px; width:70px" />
+        <img src="{{ friend.user.profile.image.url }}" class="rounded-circle cover" style="position: relative; height:70px; width:70px; border: 3px white solid;" />
         </div>
       </a>
-      <p>{{ friend.user.username }}</p>
+      <p class="mb-0">{{ friend.user.username }}</p>
     </div>
     {% endfor %}
   </div>
@@ -37,16 +37,17 @@
       position: relative;
     }
     
-    .story::after {
+    .story::before {
       content: '';
+      border-radius: 50%;
+      aspect-ratio: 1;
+      background: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
       position: absolute;
       box-sizing: border-box;
-      border: 3px solid red;
-      border-radius: 50%;
-      width: calc(100% + 10px);
-      height: calc(100% + 10px);
-      left: -5px;
-      top: -5px;
+      width: calc(100% + 8px);
+      height: calc(100% + 8px);
+      left: -4px;
+      top: -4px;
     }
   .top {
       display: flex;
@@ -94,13 +95,23 @@
       color: #4d4d4d;
       cursor: pointer;
   }
-  
+  .card > i {
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    transform: translate(-50%, -50%);
+    color: #dfdfdf;
+    opacity: 60%;
+    z-index: 99;
+    font-size: 5rem;
+    display: none;
+}
 
   </style>
 
   <div class="">
     {% for post in posts %}
-    <div class="card" style="margin-bottom:20px;">
+    <div class="card" style="margin-bottom:10px;">
       <div class="row p-2" style="margin:0px;padding:0px;">
         <div class="top">
           <div class="userDetails">
@@ -117,13 +128,14 @@
                
                 <div class="dropdown-menu">
                   <!-- Dropdown menu links -->
-                  <a class="dropdown-item" onclick="CopyText('{{ request.build_absolute_uri|cut:request.get_full_path }}{% url 'post-detail' post.id %}')" >copy link</a>
+                  <a class="dropdown-item" onclick="CopyText('{{ request.build_absolute_uri|slice:"0:-1" }}{% url 'post-detail' post.id %}')" >copy link</a>
                 </div>
               </div>
           </div>
         </div>
       </div>
-      <a href="{% url 'post-detail' post.id %}"><img class="card-img-top" src="{{ post.pic.url }}" alt="" /></a>
+      <i class="bi bi-heart-fill" id="heart{{ post.id }}"></i>
+      <img class="card-img-top post-img" ondblclick="PostLiked({{ post.id }},event)" src="{{ post.pic.url }}" alt="" />
       <p class="card-text text-dark p-3 m-0">
         <b>{{ post.user_name }}</b> {{ post.description }}
         <br>
@@ -134,17 +146,30 @@
         </span>
         {% endif %}
       </p>
-      <div class="card-footer">
-        <button class="btn btn-white mr-3 like" id="{{ post.id }}">
+      <hr style="margin:0px">
+      <div class="p-1">
+        <button class="btn btn-white mr-1 like" id="{{ post.id }}">
           {% if post in liked_post %}
           <a href="{% url 'post-like' %}" style="color: red" id="likebtn{{ post.id }}">
-            Unlike</a>
-          | <span id="likes{{ post.id }}">{{post.likes.count}}</span> {% else %}
-          <a href="{% url 'post-like' %}" style="color: green" id="likebtn{{ post.id }}">
-            Like</a>
-          | <span id="likes{{ post.id }}">{{post.likes.count}}</span> {% endif %}
+            <i class="bi bi-heart-fill"></i></a>
+           <span id="likes{{ post.id }}">{{post.likes.count}}</span> 
+           {% else %}
+          <a href="{% url 'post-like' %}" style="color: black" id="likebtn{{ post.id }}">
+            <i class="bi bi-heart"></i></a>
+           <span id="likes{{ post.id }}">{{post.likes.count}}</span> 
+           {% endif %}
         </button>
-        <a class="btn btn-outline-info" href="{% url 'post-detail' post.id %}">Comments | {{ post.details.count }}</a>
+        <button class="btn btn-white mr-1">
+           <a class="" style="color:black;" href="{% url 'post-detail' post.id %}"><i class="bi bi-chat"></i></a>
+        </button>
+        <button class="btn btn-white mr-1" id="sharebtn{{ post.id }}">
+           <a class="" onclick="share('{{ request.build_absolute_uri|slice:'0:-1' }}{% url 'post-detail' post.id %}','{{post.user_name}}','{{post.description}}')" style="color:black;"><i class="bi bi-share"></i></a>
+        </button>
+        <div class="btn btn-white" style="float: right;">
+          <a class="" style="font-size: small;color: #524f4f;" href="{% url 'post-detail' post.id %}">
+            {{ post.details.count }} {% if post.details.count > 0 and post.details.count < 2 %}comment{% else %}comments{% endif %}
+          </a>
+        </div>
       </div>
     </div>
     {% endfor %}
@@ -177,11 +202,30 @@
 
   {% block jsfiles %}
   <script>
+    function PostLiked(id,e){
+      console.log("clicked");
+      var id = id;
+      var href = $(".like").find("a").attr("href");
+      e.preventDefault();
+      var heart = $("#heart" + id);
+      heart.fadeIn("fast");
+      setTimeout(function() {
+        heart.fadeOut("slow");
+      }, 200);
+      console.log($("#likebtn" + id).css("color"));
+      if($("#likebtn" + id).css("color")=="rgb(0, 0, 0)"){
+
+        likeBtn(id,href);
+      }
+    }
     $(".like").click(function (e) {
       var id = this.id;
       var href = $(".like").find("a").attr("href");
       e.preventDefault();
+      likeBtn(id,href);
+    });
 
+    function likeBtn(id,href){
       $.ajax({
         url: href,
         data: {
@@ -189,19 +233,26 @@
         },
         success: function (response) {
           if (response.liked) {
-            $("#likebtn" + id).html("Unlike");
+            $("#likebtn" + id).html('<i class="bi bi-heart-fill"></i>');
             $("#likebtn" + id).css("color", "red");
             var likes = parseInt($("#likes" + id).html());
             $("#likes" + id).html(likes+1);
           } else {
-            $("#likebtn" + id).html("Like");
-            $("#likebtn" + id).css("color", "green");
+            $("#likebtn" + id).html('<i class="bi bi-heart"></i>');
+            $("#likebtn" + id).css("color", "black");
             var likes = parseInt($("#likes" + id).html());
             $("#likes" + id).html(likes-1);
           }
         },
       });
-    });
+    }
+    function share(url,title,desc){
+      navigator.share({
+        url: url,
+        title: "Post by - " + title,
+        text: desc
+      });
+    }
   </script>
   <script>
     function CopyText(url) {
