@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 from pathlib import Path
 import os
+import boto3
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'channels',
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -94,6 +96,14 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'FLIQ.wsgi.application'
+ASGI_APPLICATION = 'FLIQ.asgi.application'
+
+CHANNEL_LAYERS = {
+	"default": {
+		"BACKEND": "channels.layers.InMemoryChannelLayer",
+	}
+}
+
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -133,7 +143,7 @@ SITE_ID = 2
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
-
+SOCIALACCOUNT_LOGIN_ON_GET=True
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -184,3 +194,4 @@ GCS_USE_UNSIGNED_URLS = True
 
 DJANGO_SETTINGS_MODULE='correctly_settings'
 DEFAULT_AUTO_FIELD='django.db.models.AutoField' 
+DEFAULT_FROM_EMAIL = 'mandeep88712@gmail.com'
