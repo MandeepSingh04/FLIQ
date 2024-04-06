@@ -19,19 +19,23 @@ def chat(request):
             room_details = Room.objects.get(name=room)
         except Room.DoesNotExist:
             room_details = None
-        read_by_user = Q(room=room_details.id, read=request.user.username)
-        read_by_all = Q(room=room_details.id, read="all")
-        messages = Message.objects.filter(read_by_user | read_by_all)
-        unread_messages = Message.objects.filter(room=room_details.id,read=friend.user.username)
-        num = unread_messages.count()
-        all = messages.count()
-        all_messages = Message.objects.filter(room=room_details.id).order_by('-date')
-        if((all==0) and (num==0)):
-            recent = "Tap to start a conversation"
-            time = 0
-        else:
-            recent = all_messages[0].value
-            time = all_messages[0].date
+        num=0
+        recent = "Tap to start a conversation"
+        time = 0
+        if(room_details):
+            read_by_user = Q(room=room_details.id, read=request.user.username)
+            read_by_all = Q(room=room_details.id, read="all")
+            messages = Message.objects.filter(read_by_user | read_by_all)
+            unread_messages = Message.objects.filter(room=room_details.id,read=friend.user.username)
+            num = unread_messages.count()
+            all = messages.count()
+            all_messages = Message.objects.filter(room=room_details.id).order_by('-date')
+            if((all==0) and (num==0)):
+                recent = "Tap to start a conversation"
+                time = 0
+            else:
+                recent = all_messages[0].value
+                time = all_messages[0].date
         chat = [num,recent,time]
         chat_details.append(chat)
     context={
@@ -55,19 +59,23 @@ def room(request, room):
             room_details = Room.objects.get(name=room_p)
         except Room.DoesNotExist:
             room_details = None
-        read_by_user = Q(room=room_details.id, read=request.user.username)
-        read_by_all = Q(room=room_details.id, read="all")
-        messages = Message.objects.filter(read_by_user | read_by_all)
-        unread_messages = Message.objects.filter(room=room_details.id,read=friend.user.username)
-        num = unread_messages.count()
-        all = messages.count()
-        all_messages = Message.objects.filter(room=room_details.id).order_by('-date')
-        if((all==0) and (num==0)):
-            recent = "Tap to start a conversation"
-            time = 0
-        else:
-            recent = all_messages[0].value
-            time = all_messages[0].date
+        num=0
+        recent = "Tap to start a conversation"
+        time = 0
+        if(room_details):
+            read_by_user = Q(room=room_details.id, read=request.user.username)
+            read_by_all = Q(room=room_details.id, read="all")
+            messages = Message.objects.filter(read_by_user | read_by_all)
+            unread_messages = Message.objects.filter(room=room_details.id,read=friend.user.username)
+            num = unread_messages.count()
+            all = messages.count()
+            all_messages = Message.objects.filter(room=room_details.id).order_by('-date')
+            if((all==0) and (num==0)):
+                recent = "Tap to start a conversation"
+                time = 0
+            else:
+                recent = all_messages[0].value
+                time = all_messages[0].date
         chat = [num,recent,time]
         chat_details.append(chat)
     name = room.replace(request.user.username, '').replace('-', '')
@@ -118,3 +126,9 @@ def getMessages(request, room):
     unread_messages = Message.objects.filter(room=room_details.id,read=name)
     unread_message_list = list(unread_messages.values())
     return JsonResponse({"messages":list(messages.values()),"unread_messages": unread_message_list})
+
+
+
+def chatPage(request, *args, **kwargs):
+    context = {}
+    return render(request, "chatPage.html", context)

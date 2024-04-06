@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 from pathlib import Path
 import os
-import boto3
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -51,7 +50,6 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-    'channels',
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -97,12 +95,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'FLIQ.wsgi.application'
 ASGI_APPLICATION = 'FLIQ.asgi.application'
-
-CHANNEL_LAYERS = {
-	"default": {
-		"BACKEND": "channels.layers.InMemoryChannelLayer",
-	}
-}
 
 
 # Database
