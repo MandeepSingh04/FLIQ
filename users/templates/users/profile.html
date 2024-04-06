@@ -10,17 +10,117 @@
 {% block mobmyprofileactive %}active{% endblock mobmyprofileactive %}
 
 {% block content %}
-<br /><br />
+
+<style>
+  .cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+  :root {
+    scrollbar-width: none;
+
+    --base--primary: hsl(204 6% 90%);
+    --base--secondary: #ffffff;
+    --secondary--accent: hsl(204 6% 76%);
+    --system-navigation: hsl(204 90% 6%);
+    --primary-accent--blue: #0095f6;
+    --accent--blue: hsl(204 80% 60%);
+    --accent--red: #ed4956;
+
+    /* brand-color */
+    --ig-maroon: #cd486b;
+    --ig-orange: #fbad50;
+    --ig-blue: #4c68d7;
+
+    /* light-clr */
+    --light-transparent: #00000019;
+    --light-100: #dadde1;
+    --light-200: #efefef;
+    --light-300: #fafafa;
+}
+
+.story__highlights {
+    margin-block-start: 0.5rem;
+}
+
+.media__scroller--content {
+  display: inline-flex;
+  gap: 1rem;
+  padding: 0px;
+}
+
+.list__item {
+    display: inline-flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.25rem;
+    align-items: center;
+}
+
+.media__link {
+    border-radius: 50%;
+    aspect-ratio: 1;
+    height: 54px;
+    background: linear-gradient(45deg, var(--ig-orange), var(--ig-maroon));
+    position: relative;
+}
+
+.media__link::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    margin: 0.125rem;
+    border-radius: 50%;
+    background-color: #fff;
+    outline: 1px solid var(--secondary--accent);
+    outline-offset: -0.25rem;
+    box-shadow: 0 0 0px 3px #fff inset,
+        0 0 0px 45px var(--light-transparent) inset;
+}
+
+.link__text {
+    font-size: 12px;
+}
+
+.media__navigation {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+}
+
+
+.profileBanner{
+  background: linear-gradient(-43deg, #2c3da1 0%, #125767 46%, #a78d5d 100%);
+}
+.profileBanner > div>div>div>span> a{
+  color:#fff;
+}
+.banner-name{
+  font-size:larger;
+}
+.semi-border-right::after{
+  content: '';
+  position: absolute;
+  top: 25%;
+  bottom: 30%;
+  right: 0;
+  width: 0.5px; /* Adjust the border width as per your design */
+  background-color: #fff;
+}
+</style>
+
 <div class="main-content">
-  <div class="container mt-7">
-    <div class="row">
-      <div class="col-xl-8 order-xl-2 mx-auto mb-5 mb-xl-0">
-        <div class="shadow">
-          {% if request.user == u %}
-          {% else %} {% if button_status == 'not_friend' %}
-          {% elif button_status == 'friend_request_sent' %}
-          {% elif button_status == 'friend_request_received' %}
-          <div class="row p-3 d-flex justify-content-between align-items-center" style="background-color:#eeeeee; margin-bottom:3vh;">
+  <div class="profileBanner col-xl-6 mx-auto py-3">
+    {% if request.user == u %}
+    {% else %} 
+      {% if button_status == 'not_friend' %}
+      {% elif button_status == 'friend_request_sent' %}
+      {% elif button_status == 'friend_request_received' %}
+      <div class="row p-3 d-flex justify-content-between align-items-center" style="background-color:#eeeeee; margin-bottom:3vh;">
             <div class="col-md-6">
               <p><b><i class="bi bi-person-plus-fill"></i> {{ u.username }}</b> sent you a friend request</p>
             </div>
@@ -30,38 +130,73 @@
                 <small><a class="btn btn-danger" href="/users/friend-request/delete/{{ u.id }}">Reject Request</a></small>
               </div>
             </div>
+      </div>
+      {% endif %} 
+    {% endif %}
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <div class="text-center w-100 text-light">
+          <div class="card-profile-image">
+            <a href="{{ u.profile.image.url }}">
+              <img src="{{ u.profile.image.url }}" class="rounded-circle" width="140px" height="140px"
+              style="object-fit:cover;" />
+            </a>
           </div>
-          {% endif %} {% endif %}
-          <div class="row mx-2">
-            <div class="col-6 col-sm-5 col-md-5 col-lg-4 order-lg-4">
-              <div class="card-profile-image">
-                <a href="{{ u.profile.image.url }}">
-                  <img src="{{ u.profile.image.url }}" class="rounded-circle" width="140px" height="140px"
-                    style="object-fit:cover;" />
-                </a>
-              </div>
+          <p class="banner-name mb-0">{{ u.username }}</p>
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        <div class="text-center w-100 h-100 text-light">
+          <div class="row mt-1 h-100">
+            <div class="col-6 d-flex flex-wrap text-center align-content-center justify-content-center semi-border-right">
+              <a class="text-light" href="{% url 'user-posts' u.username %}">
+              <h4 class="profile-stat-count mb-0">{{ post_count }}</h4>
+              <p class="description">Posts</p>
+              </a>
             </div>
-            <div class="col-6 col-sm-7 col-md-7 col-lg-8 order-lg-8">
-              <div class="row my-2">
-                <h3 class="profile-user-name">{{ u.username }}</h3>
-              </div>
-              
-              <div class="row">
-                <div class="profile-stats my-1">
-                  <span class="profile-stat-count">{{ post_count }}</span>
-                  <span class="description"><a href="{% url 'user-posts' u.username %}">Posts</a></span>
-                  <span class="profile-stat-count">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                  <span class="profile-stat-count">{{ u.profile.friends.count }}</span>
-                  {% if request.user == u %}
-                  <span class="description"><a href="{% url 'friend_list' %}">Friends</a></span>
-                  {% else %}
-                  <span class="description">Friends</span>
-                  {% endif %}
-                  {% comment %} <span class="profile-stat-count">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                  <span class="profile-stat-count">206 following</span> {% endcomment %}
-                </div>
-              </div>
-              <div class="row my-2">
+            <div class="col-6 d-flex flex-wrap text-center align-content-center justify-content-center">
+              <a class="text-light" href="{% url 'friend_list' %}">
+              <h4 class="profile-stat-count mb-0">{{ u.profile.friends.count }}</h4>
+              <p class="description">Friends</p>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>          
+  </div>
+  <div class="profileBody col-xl-6 mx-auto p-2 m-0">
+    <div class="">
+      {% if request.user == u %}
+      {% else %} {% if button_status == 'not_friend' %}
+      {% elif button_status == 'friend_request_sent' %}
+      {% elif button_status == 'friend_request_received' %}
+      <div class="row p-3 d-flex justify-content-between align-items-center" style="background-color:#eeeeee; margin-bottom:3vh;">
+        <div class="col-md-6">
+          <p><b><i class="bi bi-person-plus-fill"></i> {{ u.username }}</b> sent you a friend request</p>
+        </div>
+        <div class="col-md-6">
+          <div class="row">
+            <small><a class="btn btn-success mr-2" href="/users/friend-request/accept/{{ u.id }}">Accept Request</a></small>
+            <small><a class="btn btn-danger" href="/users/friend-request/delete/{{ u.id }}">Reject Request</a></small>
+          </div>
+        </div>
+      </div>
+      {% endif %} {% endif %}
+      <div class="row">
+        <div class="col-md-6">
+          <div class="profile-desc my-2 mx-2">
+            <strong class="profile-stat-count">{{ u.profile.name }}</strong><br>
+            <span class="profile-stat-count">{{ u.profile.bio }}</span><br>
+            {% if u.profile.link %}
+            <a class="profile-stat-count" target="_blank" rel="noopener noreferrer" href="{{ u.profile.link }}">{{ u.profile.link }}</a>
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="row mx-2">
+            <div class="col-12 col-sm-12 col-md-12">
+              <div class="row my-2 d-flex float-md-right">
                 {% if request.user == u %}
                 <a class="btn btn-outline-dark mr-2" href="{% url 'edit_profile' %}">Edit Profile</a>
                 <div class="dropdown">
@@ -88,41 +223,173 @@
               </div>
             </div>
           </div>
-          <div class="row mx-3">
-            <div class="profile-desc my-2">
-              <strong class="profile-stat-count">{{ u.profile.name }}</strong><br>
-              <span class="profile-stat-count">{{ u.profile.bio }}</span><br>
-              {% if u.profile.link %}
-              <a class="profile-stat-count" target="_blank" rel="noopener noreferrer" href="{{ u.profile.link }}">{{ u.profile.link }}</a>
-              {% endif %}
-            </div>
-          </div>
+        </div>
+      </div>
+      <section class="story__highlights media__scroller d-none">
+        <ul class="media__scroller--content">
+            <li class="list__item"> <a href="#" class="media__link"> </a> <span class="link__text">Link 1</span> </li>
+            <li class="list__item"> <a href="#" class="media__link"> </a> <span class="link__text">Link 2</span> </li>
+            <li class="list__item"> <a href="#" class="media__link"> </a> <span class="link__text">Link 3</span> </li>
+            <li class="list__item"> <a href="#" class="media__link"> </a> <span class="link__text">Link 4</span> </li>
+            <li class="list__item"> <a href="#" class="media__link"> </a> <span class="link__text">Link 5</span> </li>
+        </ul>
+      </section>
+      <div class="media__navigation">
+      <nav class="tabs d-none"> 
+        <a href="#" class="tab__link main-posts"> 
+          <svg aria-label="Oppaat" color="#8e8e8e" fill="#8e8e8e" height="24" role="img" viewBox="0 0 24 24" width="24">
+            <path d="M22.626 1.22a1.002 1.002 0 0 0-.843-.196L12 3.198 2.217 1.024A1 1 0 0 0 1 2v17.778a1 1 0 0 0 .783.976l10 2.222a.994.994 0 0 0 .214.024h.005a1.01 1.01 0 0 0 .215-.024l10-2.222a1 1 0 0 0 .783-.976V2a1.001 1.001 0 0 0-.374-.78ZM11 20.753l-8-1.777V3.246l8 1.778Zm10-1.777-8 1.777V5.023l8-1.776Zm-5.252-7.645a.987.987 0 0 0 .217-.024l2.5-.556a1 1 0 0 0 .783-.976v-2.77a1 1 0 0 0-1.217-.975l-2.5.555a1 1 0 0 0-.783.976v2.77a1 1 0 0 0 1 1Zm2.283 4.21-2.5.555a1 1 0 1 0 .434 1.952l2.5-.555a1 1 0 1 0-.434-1.952ZM5.535 10.75l2.5.556a.986.986 0 0 0 .217.024 1 1 0 0 0 1-1V7.56a1 1 0 0 0-.783-.976l-2.5-.555a1 1 0 0 0-1.217.976v2.77a1 1 0 0 0 .783.976Zm2.934 5.345-2.5-.555a1 1 0 1 0-.434 1.952l2.5.555a1 1 0 1 0 .434-1.952Zm9.562-3.926-2.5.556a1 1 0 1 0 .434 1.952l2.5-.556a1 1 0 1 0-.434-1.952Z"></path>
+          </svg> 
+        </a> 
+        <a href="#" class="tab__link reels"> 
+          <svg aria-label="Reels" color="#8e8e8e" fill="#8e8e8e" height="24" role="img" viewBox="0 0 24 24" width="24">
+            <line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" x1="2.049" x2="21.95" y1="7.002" y2="7.002"></line>
+            <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="13.504" x2="16.362" y1="2.001" y2="7.002"></line>
+            <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="7.207" x2="10.002" y1="2.11" y2="7.002"></line>
+            <path d="M2 12.001v3.449c0 2.849.698 4.006 1.606 4.945.94.908 2.098 1.607 4.946 1.607h6.896c2.848 0 4.006-.699 4.946-1.607.908-.939 1.606-2.096 1.606-4.945V8.552c0-2.848-.698-4.006-1.606-4.945C19.454 2.699 18.296 2 15.448 2H8.552c-2.848 0-4.006.699-4.946 1.607C2.698 4.546 2 5.704 2 8.552Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            <path d="M9.763 17.664a.908.908 0 0 1-.454-.787V11.63a.909.909 0 0 1 1.364-.788l4.545 2.624a.909.909 0 0 1 0 1.575l-4.545 2.624a.91.91 0 0 1-.91 0Z" fill-rule="evenodd"></path>
+          </svg>
+        </a> 
+        <a href="#" class="tab__link guide"> 
+          <svg aria-label="Oppaat" color="#8e8e8e" fill="#8e8e8e" height="24" role="img" viewBox="0 0 24 24" width="24">
+            <path d="M22.626 1.22a1.002 1.002 0 0 0-.843-.196L12 3.198 2.217 1.024A1 1 0 0 0 1 2v17.778a1 1 0 0 0 .783.976l10 2.222a.994.994 0 0 0 .214.024h.005a1.01 1.01 0 0 0 .215-.024l10-2.222a1 1 0 0 0 .783-.976V2a1.001 1.001 0 0 0-.374-.78ZM11 20.753l-8-1.777V3.246l8 1.778Zm10-1.777-8 1.777V5.023l8-1.776Zm-5.252-7.645a.987.987 0 0 0 .217-.024l2.5-.556a1 1 0 0 0 .783-.976v-2.77a1 1 0 0 0-1.217-.975l-2.5.555a1 1 0 0 0-.783.976v2.77a1 1 0 0 0 1 1Zm2.283 4.21-2.5.555a1 1 0 1 0 .434 1.952l2.5-.555a1 1 0 1 0-.434-1.952ZM5.535 10.75l2.5.556a.986.986 0 0 0 .217.024 1 1 0 0 0 1-1V7.56a1 1 0 0 0-.783-.976l-2.5-.555a1 1 0 0 0-1.217.976v2.77a1 1 0 0 0 .783.976Zm2.934 5.345-2.5-.555a1 1 0 1 0-.434 1.952l2.5.555a1 1 0 1 0 .434-1.952Zm9.562-3.926-2.5.556a1 1 0 1 0 .434 1.952l2.5-.556a1 1 0 1 0-.434-1.952Z"></path>
+          </svg>
+        </a> 
+        <a href="#" class="tab__link tagged">
+          <svg aria-label="Merkityt" color="#8e8e8e" fill="#8e8e8e" height="24" role="img" viewBox="0 0 24 24" width="24">
+            <path d="M10.201 3.797 12 1.997l1.799 1.8a1.59 1.59 0 0 0 1.124.465h5.259A1.818 1.818 0 0 1 22 6.08v14.104a1.818 1.818 0 0 1-1.818 1.818H3.818A1.818 1.818 0 0 1 2 20.184V6.08a1.818 1.818 0 0 1 1.818-1.818h5.26a1.59 1.59 0 0 0 1.123-.465Z" fill="#fff" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            <path d="M18.598 22.002V21.4a3.949 3.949 0 0 0-3.948-3.949H9.495A3.949 3.949 0 0 0 5.546 21.4v.603" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            <circle cx="12.072" cy="11.075" fill="none" r="3.556" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></circle>
+          </svg> 
+        </a> 
+      </nav>
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs" id="profileTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="posts-tab" data-toggle="tab" href="#posts" role="tab" aria-controls="posts" aria-selected="true">Posts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="friends-tab" data-toggle="tab" href="#friends" role="tab" aria-controls="friends" aria-selected="false">Friends</a>
+        </li>
+      </ul>
 
-          {% comment %} Feed {% endcomment %}
-          <div class="container">
-            <div class="row">
-              {% if not posts %}
-              <div class="col-md-12 py-5 my-5 text-center border-top">
-                <h3>No posts to display</h3>
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <div class="tab-pane active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
+          {% if not posts %}
+          <div class="col-md-12 py-5 my-5 text-center border-top">
+            <h3>No posts to display</h3>
+          </div>
+            
+          {% endif %}
+          {% if request.user != u and button_status == 'not_friend' %}
+          <div class="col-md-12 py-5 my-5 text-center border-top">
+            <h3>This account is private</h3>
+            <p>Follow this account to see thier posts</p>
+          </div>
+            
+          {% else %}
+          <div class="row">
+          {% for post in posts %}
+          <div class="col-4 m-0 p-0">
+            <a href="{% url 'post-detail' post.id %}"><img class="" style="width: 100%; object-fit: cover;border:1px #fff solid;aspect-ratio:1;" src="{{ post.pic.url }}" alt="" /></a>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+      <div class="tab-pane" id="friends" role="tabpanel" aria-labelledby="friends-tab">
+          <div class="mt-2">
+            <div class="p-2">
+              {% if button_status == 'none' %}
+              <div class="py-1" style="display:inline-flex; width:100%">
+                <div class="p-0" style="max-width:max-content">
+                  <a href="{{ request.user.profile.get_absolute_url }}">
+                    <img src="{{ request.user.profile.image.url }}" class="rounded-circle cover" style="position: relative; height:50px; width:50px" alt=""/>
+                  </a>
+                </div>
+                <div class="ml-2" style="width:100%">
+                  <a class="text-dark" style="display: inline-flex;height: 50%;align-items: center;" href="{{ request.user.profile.get_absolute_url }}"><b>{{ request.user }}</b></a>
+                  <div class="ml-2" style="display: inline-flex; float: right; height: 50%; align-items: center;">
+                    {% comment %} <a href="#" class="follow">View profile</a> {% endcomment %}
+                  </div>
+                  <div style="width:100%;">
+                    <p class="card-text text-dark">Followed by mandeepsingh + 2 more</p>
+                  </div>
+                </div>
               </div>
-                
               {% endif %}
-              {% for post in posts %}
-              <div class="col-md-4">
-                <div class="card card-signin my-3">
-                  <a href="{% url 'post-detail' post.id %}"><img class="card-img-top" style="height: 200px; width: 100%; object-fit: cover;" src="{{ post.pic.url }}"
-                      alt="" /></a>
-                  <div class="card-body">
-                    <p class="card-text text-dark">{{ post.description }}</p>
+              {% if mutual_friends %}
+              {% for user_p in mutual_friends %}
+              <div class="py-1" style="display:inline-flex; width:100%">
+                <div class="p-0" style="max-width:max-content">
+                  <a href="{{ user_p.get_absolute_url }}">
+                    <img src="{{ user_p.image.url }}" class="rounded-circle cover" style="position: relative; height:50px; width:50px" alt=""/>
+                  </a>
+                </div>
+                <div class="ml-2" style="width:100%">
+                  <a class="text-dark" style="display: inline-flex;height: 50%;align-items: center;" href="{{ user_p.get_absolute_url }}"><b>{{ user_p }}</b></a>
+                  <div class="ml-2" style="display: inline-flex; float: right; height: 50%; align-items: center;">
+                    <a class="btn btn-danger float-right" href="{% url 'delete_friend' user_p.id %}">UnFriend</a>
+                  </div>
+                  <div style="width:100%;">
+                    <p class="card-text text-dark">Followed by mandeepsingh + 2 more</p>
                   </div>
                 </div>
               </div>
               {% endfor %}
+              {% if non_mutual_friends %}
+              {% for user_p in non_mutual_friends %}
+              <div class="py-1" style="display:inline-flex; width:100%">
+                <div class="p-0" style="max-width:max-content">
+                  <a href="{{ user_p.get_absolute_url }}">
+                    <img src="{{ user_p.image.url }}" class="rounded-circle cover" style="position: relative; height:50px; width:50px" alt=""/>
+                  </a>
+                </div>
+                <div class="ml-2" style="width:100%">
+                  <a class="text-dark" style="display: inline-flex;height: 50%;align-items: center;" href="{{ user_p.get_absolute_url }}"><b>{{ user_p }}</b></a>
+                  <div class="ml-2" style="display: inline-flex; float: right; height: 50%; align-items: center;">
+                    <a href="#" class="follow">Add friend</a>
+                  </div>
+                  <div style="width:100%;">
+                    <p class="card-text text-dark">Followed by mandeepsingh + 2 more</p>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              {% endif %}
+              {% elif friends_list %}
+              {% for user_p in friends_list %}
+              <div class="py-1" style="display:inline-flex; width:100%">
+                <div class="p-0" style="max-width:max-content">
+                  <a href="{{ user_p.get_absolute_url }}">
+                    <img src="{{ user_p.image.url }}" class="rounded-circle cover" style="position: relative; height:50px; width:50px" alt=""/>
+                  </a>
+                </div>
+                <div class="ml-2" style="width:100%">
+                  <a class="text-dark" style="display: inline-flex;height: 50%;align-items: center;" href="{{ user_p.get_absolute_url }}"><b>{{ user_p }}</b></a>
+                  <div class="ml-2" style="display: inline-flex; float: right; height: 50%; align-items: center;">
+                    <a href="#" class="follow">Add friend</a>
+                  </div>
+                  <div style="width:100%;">
+                    <p class="card-text text-dark">Followed by mandeepsingh + 2 more</p>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              {% elif button_status != 'none' %}
+                <h5>
+                  <i
+                    >You have no friends now! Make some new
+                    <a href="{% url 'users_list' %}">friends here!</a></i
+                  >
+                </h5>
+              {% endif %}
             </div>
           </div>
-          {% comment %} End Feed {% endcomment %}
         </div>
       </div>
+      
     </div>
   </div>
 </div>

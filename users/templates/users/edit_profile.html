@@ -11,6 +11,117 @@
 </form> {% endcomment %}
 {% endblock searchform %} {% load crispy_forms_tags %} {% block content %}
 <br /><br />
+<div class="container d-none">
+  <form class="file-upload">
+  <div class="row">
+      <div class="col-12">
+        <!-- Form START -->
+          <div class="row mb-5 gx-5">
+            <!-- Upload profile -->
+            <div class="col-xxl-4">
+              <div class="bg-secondary-soft px-4 py-5 rounded">
+                <div class="row g-3">
+                  <h4 class="mb-4 mt-0">Upload your profile photo</h4>
+                  <div class="text-center">
+                    <!-- Image upload -->
+                    <div class="square position-relative display-2 mb-3">
+                      <i class="fas fa-fw fa-user position-absolute top-50 start-50 translate-middle text-secondary"></i>
+                    </div>
+                    <!-- Button -->
+                    <input type="file" id="customFile" name="file" hidden="">
+                    <label class="btn btn-success-soft btn-block" for="customFile">Upload</label>
+                    <button type="button" class="btn btn-danger-soft">Remove</button>
+                    <!-- Content -->
+                    <p class="text-muted mt-3 mb-0"><span class="me-1">Note:</span>Minimum size 300px x 300px</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Contact detail -->
+            <div class="col-xxl-8 mb-5 mb-xxl-0">
+              <div class="bg-secondary-soft px-4 py-5 rounded">
+                <div class="row g-3">
+                  <h4 class="mb-4 mt-0">Update Profile</h4><br>
+                  <!-- First Name -->
+                  <div class="col-md-6">
+                    <label class="form-label">First Name *</label>
+                    <input type="text" class="form-control" placeholder="" aria-label="First name" value="Scaralet">
+                  </div>
+                  <!-- Last name -->
+                  <div class="col-md-6">
+                    <label class="form-label">Last Name *</label>
+                    <input type="text" class="form-control" placeholder="" aria-label="Last name" value="Doe">
+                  </div>
+                  <!-- Phone number -->
+                  <div class="col-md-6">
+                    <label class="form-label">Phone number *</label>
+                    <input type="text" class="form-control" placeholder="" aria-label="Phone number" value="(333) 000 555">
+                  </div>
+                  <!-- Mobile number -->
+                  <div class="col-md-6">
+                    <label class="form-label">Mobile number *</label>
+                    <input type="text" class="form-control" placeholder="" aria-label="Phone number" value="+91 9852 8855 252">
+                  </div>
+                  <!-- Email -->
+                  <div class="col-md-6">
+                    <label for="inputEmail4" class="form-label">Email *</label>
+                    <input type="email" class="form-control" id="inputEmail4" value="example@homerealty.com">
+                  </div>
+                  <!-- Skype -->
+                  <div class="col-md-6">
+                    <label class="form-label">Skype *</label>
+                    <input type="text" class="form-control" placeholder="" aria-label="Phone number" value="Scaralet D">
+                  </div>
+                </div> <!-- Row END -->
+              </div>
+            </div>
+            
+          </div> <!-- Row END -->
+  
+          <!-- Social media detail -->
+          <div class="row mb-5 gx-5">
+            <div class="col-xxl-6 mb-5 mb-xxl-0">
+              <div class="bg-secondary-soft px-4 py-5 rounded">
+                <div class="row g-3">
+                  <h4 class="mb-4 mt-0">Social media detail</h4>
+                  <!-- Facebook -->
+                  <div class="col-md-6">
+                    <label class="form-label"><i class="fab fa-fw fa-facebook me-2 text-facebook"></i>Facebook *</label>
+                    <input type="text" class="form-control" placeholder="" aria-label="Facebook" value="http://www.facebook.com">
+                  </div>
+                  <!-- Twitter -->
+                  <div class="col-md-6">
+                    <label class="form-label"><i class="fab fa-fw fa-twitter text-twitter me-2"></i>Twitter *</label>
+                    <input type="text" class="form-control" placeholder="" aria-label="Twitter" value="http://www.twitter.com">
+                  </div>
+                  <!-- Linkedin -->
+                  <div class="col-md-6">
+                    <label class="form-label"><i class="fab fa-fw fa-linkedin-in text-linkedin me-2"></i>Linkedin *</label>
+                    <input type="text" class="form-control" placeholder="" aria-label="Linkedin" value="http://www.linkedin.com">
+                  </div>
+                  <!-- Instragram -->
+                  <div class="col-md-6">
+                    <label class="form-label"><i class="fab fa-fw fa-instagram text-instagram me-2"></i>Instagram *</label>
+                    <input type="text" class="form-control" placeholder="" aria-label="Instragram" value="http://www.instragram.com">
+                  </div>
+                  <!-- Dribble -->
+                  <div class="col-md-6">
+                    <label class="form-label"><i class="fas fa-fw fa-basketball-ball text-dribbble me-2"></i>Dribble *</label>
+                    <input type="text" class="form-control" placeholder="" aria-label="Dribble" value="http://www.dribble.com">
+                  </div>
+                  <!-- Pinterest -->
+                  <div class="col-md-6">
+                    <label class="form-label"><i class="fab fa-fw fa-pinterest text-pinterest"></i>Pinterest *</label>
+                    <input type="text" class="form-control" placeholder="" aria-label="Pinterest" value="http://www.pinterest.com">
+                  </div>
+                </div> <!-- Row END -->
+              </div>
+            </div>
+          </div>
+      </div>
+  </div>
+  </form> <!-- Form END -->
+</div>
 <div class="container">
   <div class="row">
     <div class="col-sm-9 col-md-8 col-lg-7 mx-auto">
@@ -27,10 +138,23 @@
             }
           </style>
           <form class="form-signin" method="POST" enctype="multipart/form-data">
+            <div class="col-12">
+              <div class="text-center">
+                <div class="card-profile-image">
+                  <div class="mb-2" id="avatar">
+                    <img src="/media/profile_pics/images_6.jpeg" class="rounded-circle" width="140px" height="140px" style="object-fit:cover;">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="p-0 mb-1">Image : </p> {{p_form.image}}<br>
             {% csrf_token %}
             <fieldset class="form-group">
-              {{ u_form }} {{ p_form }}
+              {{ u_form }}
             </fieldset>
+            <p class="p-0 mb-1">Name : </p> {{p_form.name}}<br>
+            <p class="p-0 mb-1">Bio : </p> {{p_form.bio}}<br>
+            <p class="p-0 mb-1">Link : </p> {{p_form.link}}<br>
             <div class="form-group">
               <button
                 class="btn btn-lg btn-primary btn-block text-uppercase"
@@ -52,3 +176,28 @@
 </div>
 
 {% endblock content %}
+{% block jsfiles %}
+<script>
+  document.getElementById('id_image').addEventListener('change', handleImageUpload1);
+    function handleImageUpload1() {
+        const preview = document.getElementById('avatar');
+        preview.innerHTML = '';
+        const files = document.getElementById('id_image').files;
+
+        for (const file of files) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const image = document.createElement('img');
+                image.src = e.target.result;
+                image.style.height = '140px';
+                image.style.width = '140px';
+                image.style.borderRadius = '50%';
+                image.style.objectFit = 'cover';
+                preview.appendChild(image);
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+</script>
+{% endblock jsfiles %}

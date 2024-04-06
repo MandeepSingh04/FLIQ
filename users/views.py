@@ -45,7 +45,7 @@ def users_list(request):
     for se in sent_friend_requests:
         sent_to.append(se.to_user)
     for se in rec_friend_requests:
-        received.append(se.to_user)
+        received.append(se.from_user)
     context = {
         'users': friends,
         'sent': sent_to
@@ -90,7 +90,7 @@ def send_friend_request(request, id):
     frequest, created = FriendRequest.objects.get_or_create(
             from_user=request.user,
             to_user=user)
-    return HttpResponseRedirect('/users/{}'.format(user.profile.slug))
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 @login_required
 def cancel_friend_request(request, id):
@@ -99,7 +99,7 @@ def cancel_friend_request(request, id):
             from_user=request.user,
             to_user=user).first()
     frequest.delete()
-    return HttpResponseRedirect('/users/{}'.format(user.profile.slug))
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 @login_required
 def accept_friend_request(request, id):
@@ -118,14 +118,14 @@ def accept_friend_request(request, id):
         request_rev = FriendRequest.objects.filter(from_user=request.user, to_user=from_user).first()
         request_rev.delete()
     frequest.delete()
-    return HttpResponseRedirect('/users/{}'.format(request.user.profile.slug))
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 @login_required
 def delete_friend_request(request, id):
     from_user = get_object_or_404(User, id=id)
     frequest = FriendRequest.objects.filter(from_user=from_user, to_user=request.user).first()
     frequest.delete()
-    return HttpResponseRedirect('/users/{}'.format(request.user.profile.slug))
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 def delete_friend(request, id):
     user_profile = request.user.profile
@@ -142,7 +142,11 @@ def profile_view(request, slug):
     rec_friend_requests = FriendRequest.objects.filter(to_user=p.user)
     user_posts = Post.objects.filter(user_name=u).order_by('-date_posted')
 
-    friends = p.friends.all()
+    friends = p.friends.all().exclude(id=request.user.profile.id)
+    mutual = request.user.profile.friends.all().exclude(id=request.user.profile.id)
+    mutual_friends = friends.intersection(mutual)
+    non_mutual_friends = friends.difference(mutual)
+
 
     # is this user our friend
     button_status = 'none'
@@ -163,6 +167,8 @@ def profile_view(request, slug):
         'u': u,
         'button_status': button_status,
         'friends_list': friends,
+        'mutual_friends': mutual_friends,
+        'non_mutual_friends': non_mutual_friends,
         'sent_friend_requests': sent_friend_requests,
         'rec_friend_requests': rec_friend_requests,
         'post_count': user_posts.count,
