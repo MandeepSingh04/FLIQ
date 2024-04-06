@@ -16,8 +16,13 @@ from django.template.loader import render_to_string
 import boto3
 import random
 from django.conf import settings
+import re
 
 import json
+
+def replace(match):
+    hashtag = match.group(1)
+    return f'<a href = "/search/?p={hashtag}">{match.group(0)}</a>'
 
 @method_decorator(login_required, name='dispatch')
 class PostListView(ListView):
@@ -25,7 +30,7 @@ class PostListView(ListView):
     template_name = 'feed/home.html'
     context_object_name = 'posts'
     ordering = ['-date_posted']
-    paginate_by = 10
+    # paginate_by = 10
     def get_context_data(self, **kwargs):
         context = super(PostListView, self).get_context_data(**kwargs)
         if self.request.user.is_authenticated:
@@ -61,6 +66,11 @@ class PostListView(ListView):
             context['users'] = friends
             context['sent'] = sent_to
             context['suggestions'] = suggestions
+            hashtag_pattern = r'\#(\w+)'
+            for i in context['posts']:
+                desc = i.description
+                link_desc = re.sub(hashtag_pattern, replace,desc)
+                i.description = link_desc
 
         return context
 
@@ -139,11 +149,11 @@ def post_delete(request, pk):
 
 @login_required
 def search(request):
-    query = request.GET.get('p')
+    query = "#" + request.GET.get('p')
     if(not query):
          return render(request, "feed/search.html")
     user_object_list = User.objects.filter(username__icontains=query)
-    post_object_list = Post.objects.filter(tags__icontains=query)
+    post_object_list = Post.objects.filter(description__icontains=query)
     liked = [i for i in post_object_list if Like.objects.filter(user = request.user, post=i)]
     context ={
         'posts': post_object_list,

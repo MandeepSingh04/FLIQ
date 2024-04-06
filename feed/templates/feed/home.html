@@ -129,6 +129,10 @@
                 <div class="dropdown-menu">
                   <!-- Dropdown menu links -->
                   <a class="dropdown-item" onclick="CopyText('{{ request.build_absolute_uri|slice:"0:-1" }}{% url 'post-detail' post.id %}')" >copy link</a>
+                  {% if post.user_name == request.user %}
+                  <a class="dropdown-item" href="{% url 'post-update' post.id %}" >Edit</a>
+                  <a class="dropdown-item" href="{% url 'post-delete' post.id %}" >Delete</a>
+                  {% endif %}
                 </div>
               </div>
           </div>
@@ -137,14 +141,14 @@
       <i class="bi bi-heart-fill" id="heart{{ post.id }}"></i>
       <img class="card-img-top post-img" ondblclick="PostLiked({{ post.id }},event)" src="{{ post.pic.url }}" alt="" />
       <p class="card-text text-dark p-3 m-0">
-        <b>{{ post.user_name }}</b> {{ post.description }}
+        <b>{{ post.user_name }}</b> {{ post.description|safe }}
         <br>
 
-        {% if post.tags %}
+        {% comment %} {% if post.tags %}
         <span class="text-danger">
           <b>Tags: <i>{{ post.tags }}</i></b>
         </span>
-        {% endif %}
+        {% endif %} {% endcomment %}
       </p>
       <hr style="margin:0px">
       <div class="p-1">
